@@ -1,5 +1,6 @@
 package Launcher;
 
+import ToolBox.DbConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +14,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("../Views/viewStock.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 1280, 760));
-        primaryStage.show();
+        DbConnection.createConnection();
+        //primaryStage.show();
     }
 
 
