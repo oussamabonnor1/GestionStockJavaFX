@@ -77,8 +77,8 @@ public class Utilities {
         return result.get() == ButtonType.OK;
     }
 
-    public static void inputDeleting(TextField... textFields) {
-        for (TextField textField : textFields) {
+    public static void inputDeleting(JFXTextField... textFields) {
+        for (JFXTextField textField : textFields) {
             textField.setText("");
         }
     }

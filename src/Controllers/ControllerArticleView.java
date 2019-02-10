@@ -3,16 +3,19 @@ package Controllers;
 import Models.Article;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,12 +25,11 @@ import static ToolBox.Utilities.*;
 public class ControllerArticleView implements Initializable {
 
     //region Variables
-
     @FXML
     private TableView<Article> tableArticle;
 
     @FXML
-    private TableColumn<Article, String> colId, colLabel, colPrice, colMinStock;
+    private TableColumn<Article, String> colnArticle, colLabel, colPrice, colMinStock;
 
     @FXML
     private JFXTextField textFieldNArticle, textFieldLabel, textFieldPrice, textFieldMinStock;
@@ -42,12 +44,19 @@ public class ControllerArticleView implements Initializable {
         //fetching all articles into observableList
         articleObservableList = DbConnection.getTableArticle();
 
-        colId.setCellValueFactory(new PropertyValueFactory<>("nArticle"));
+        //Binding the columns with the model's variables
+        colnArticle.setCellValueFactory(new PropertyValueFactory<>("nArticle"));
         colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         colMinStock.setCellValueFactory(new PropertyValueFactory<>("minStock"));
-        tableArticle.setItems(articleObservableList); //binding the observables into the table
+        //Making the columns editable
+        colLabel.setCellFactory(TextFieldTableCell.forTableColumn());
+        colPrice.setCellFactory(TextFieldTableCell.forTableColumn());
+        colMinStock.setCellFactory(TextFieldTableCell.forTableColumn());
+        //binding the observables into the table
+        tableArticle.setItems(articleObservableList);
 
+        //Making the inputs accept numeric values only (limit: 10)
         numericLimitedTextField(10, textFieldNArticle, textFieldPrice, textFieldMinStock);
     }
 
@@ -57,9 +66,41 @@ public class ControllerArticleView implements Initializable {
         //inputChecking makes sure that all the fields are filled...
         if (inputChecking(textFieldNArticle, textFieldPrice, textFieldLabel, textFieldMinStock)) {
             DbConnection.addArticle(textFieldNArticle.getText(), textFieldLabel.getText(), textFieldPrice.getText(), textFieldMinStock.getText(), tableArticle);
+            inputDeleting(textFieldNArticle, textFieldPrice, textFieldLabel, textFieldMinStock); //Clearing out the input UI
         } else {
             warningPannel("Erreur!", "Un ou plusieurs champs sont vide!", "Remplissez tout les champs SVP..", Alert.AlertType.ERROR);
         }
+    }
+
+    @FXML
+    void deleteArticle(ActionEvent event) {
+        Article articleToDelete = tableArticle.getSelectionModel().getSelectedItem();
+        if (articleToDelete != null) {
+            DbConnection.deleteArticle(articleToDelete.getnArticle() + "", tableArticle);
+        } else {
+            warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un article SVP..", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    void updateArticle(TableColumn.CellEditEvent<Article, String> produitStringCellEditEvent) {
+        Article tempArticle = tableArticle.getSelectionModel().getSelectedItem();
+        TablePosition position = tableArticle.getSelectionModel().getSelectedCells().get(0);
+        String columnName = "";
+        boolean isText = false;
+        switch (position.getColumn()) {
+            case 1:
+                columnName = "Label";
+                isText = true;
+                break;
+            case 2:
+                columnName = "Price";
+                break;
+            case 3:
+                columnName = "MinStock";
+                break;
+        }
+        DbConnection.updateArticle(tempArticle.getnArticle(), columnName, produitStringCellEditEvent.getNewValue(), isText, tableArticle);
     }
 
     @FXML
@@ -68,17 +109,7 @@ public class ControllerArticleView implements Initializable {
     }
 
     @FXML
-    void deleteArticle(ActionEvent event) {
-
-    }
-
-    @FXML
     void shopViewSelected(MouseEvent event) {
-
-    }
-
-    @FXML
-    void updateArticle(ActionEvent event) {
 
     }
 

@@ -1,46 +1,66 @@
 package Models;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class Article {
-    int nArticle, minStock;
-    String label;
-    float price;
 
-    public Article(int nArticle, String label, float price, int minStock) {
-        this.nArticle = nArticle;
-        this.minStock = minStock;
-        this.label = label;
-        this.price = price;
+    SimpleStringProperty label, nArticle, minStock, price;
+
+    public Article(String nArticle, String label, String price, String minStock) {
+        this.label = new SimpleStringProperty(label);
+        this.nArticle = new SimpleStringProperty(nArticle);
+        this.minStock = new SimpleStringProperty(minStock);
+        this.price = new SimpleStringProperty(price);
     }
 
-    public int getnArticle() {
-        return nArticle;
-    }
-
-    public void setnArticle(int nArticle) {
-        this.nArticle = nArticle;
-    }
-
-    public int getMinStock() {
-        return minStock;
-    }
-
-    public void setMinStock(int minStock) {
-        this.minStock = minStock;
-    }
-
+    //region Getters & Setters
     public String getLabel() {
+        return label.get();
+    }
+
+    public SimpleStringProperty labelProperty() {
         return label;
     }
 
     public void setLabel(String label) {
-        this.label = label;
+        this.label.set(label);
     }
 
-    public float getPrice() {
+    public String getnArticle() {
+        return nArticle.get();
+    }
+
+    public SimpleStringProperty nArticleProperty() {
+        return nArticle;
+    }
+
+    public void setnArticle(String nArticle) {
+        this.nArticle.set(nArticle);
+    }
+
+    public String getMinStock() {
+        return minStock.get();
+    }
+
+    public SimpleStringProperty minStockProperty() {
+        return minStock;
+    }
+
+    public void setMinStock(String minStock) {
+        this.minStock.set(minStock);
+    }
+
+    public String getPrice() {
+        return price.get();
+    }
+
+    public SimpleStringProperty priceProperty() {
         return price;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
+    public void setPrice(String price) {
+        this.price.set(price);
     }
+
+    //endregion
 }

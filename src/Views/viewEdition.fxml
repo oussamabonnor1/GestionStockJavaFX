@@ -16,7 +16,7 @@
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerPersonel">
     <columnConstraints>
-        <ColumnConstraints fx:id="sideMenu" hgrow="ALWAYS" minWidth="10.0" percentWidth="10.0" />
+        <ColumnConstraints fx:nArticle="sideMenu" hgrow="ALWAYS" minWidth="10.0" percentWidth="10.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="90.0" />
     </columnConstraints>
     <rowConstraints>
@@ -96,18 +96,18 @@
                             <children>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1115.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <TableView fx:id="tableCommande" prefHeight="260.0" prefWidth="1035.0" style="-fx-border-color: #404040;" VBox.vgrow="ALWAYS">
+                                        <TableView fx:nArticle="tableCommande" prefHeight="260.0" prefWidth="1035.0" style="-fx-border-color: #404040;" VBox.vgrow="ALWAYS">
                                             <columns>
-                                                <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
-                                                <TableColumn fx:id="colCode" prefWidth="128.0" text="NArticle" />
+                                                <!--<TableColumn fx:nArticle="colDesignation" prefWidth="75.0" text="Designation" />-->
+                                                <TableColumn fx:nArticle="colCode" prefWidth="128.0" text="NArticle" />
       
-                                                <!--<TableColumn fx:id="colNumeroSerie" prefWidth="150.0" text="Numero de Serie" />-->
-                                                <TableColumn fx:id="colMontant" prefWidth="190.0" text="Montant" />
-                                                <TableColumn fx:id="colDate1erVersement" prefWidth="75.0" text="Date 1er Vers" />
-                                                <TableColumn fx:id="colDateVersementFinale" prefWidth="169.0" text="Date Vers finale" />
-                                                <TableColumn fx:id="colMoisRestants" prefWidth="150.0" text="Mois Restant" />
+                                                <!--<TableColumn fx:nArticle="colNumeroSerie" prefWidth="150.0" text="Numero de Serie" />-->
+                                                <TableColumn fx:nArticle="colMontant" prefWidth="190.0" text="Montant" />
+                                                <TableColumn fx:nArticle="colDate1erVersement" prefWidth="75.0" text="Date 1er Vers" />
+                                                <TableColumn fx:nArticle="colDateVersementFinale" prefWidth="169.0" text="Date Vers finale" />
+                                                <TableColumn fx:nArticle="colMoisRestants" prefWidth="150.0" text="Mois Restant" />
       
-                                                <TableColumn fx:id="colQuantite" prefWidth="150.0" text="QNT" />
+                                                <TableColumn fx:nArticle="colQuantite" prefWidth="150.0" text="QNT" />
       
                                             </columns>
                                             <columnResizePolicy>

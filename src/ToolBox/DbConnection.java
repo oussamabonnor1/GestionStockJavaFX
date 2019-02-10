@@ -8,8 +8,6 @@ import javafx.scene.control.TableView;
 
 import java.sql.*;
 
-import ToolBox.Utilities;
-
 public class DbConnection {
     public static Connection connection;
     public static Statement statement;
@@ -29,13 +27,14 @@ public class DbConnection {
         }
     }
 
+    //region Articles
     public static ObservableList<Article> getTableArticle() {
         rs = null;
         ObservableList<Article> articles = FXCollections.observableArrayList();
         try {
             rs = statement.executeQuery("Select * FROM " + articleDbName + ";");
             while (rs.next()) {
-                articles.add(new Article(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getInt(4)));
+                articles.add(new Article(rs.getInt(1) + "", rs.getString(2), rs.getFloat(3) + "", rs.getInt(4) + ""));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +47,7 @@ public class DbConnection {
         try {
             //Checking if the Article doesn't already exist...
             rs = statement.executeQuery("SELECT * FROM " +
-                    articleDbName + " WHERE " + articleDbName + ".NArticle = " + nArticle + ";");
+                    articleDbName + " WHERE NArticle = " + nArticle + ";");
             if (!rs.next()) {
                 //Inserting new article into database...
                 statement.executeUpdate("INSERT INTO `" + articleDbName + "`(`NArticle`, `Label`, `Price`, `MinStock`)" +
@@ -56,19 +55,33 @@ public class DbConnection {
                 tableView.setItems(getTableArticle());
                 Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
             } else { //if article exists already
-                //TODO: Popup info displaying error 10/02/2019
+                Utilities.warningPannel("Erreur!", "Cet article existe déja!", "Veuillez vérifier le code introduit...", Alert.AlertType.ERROR);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void deleteArticle(String nArticle) {
+    public static void deleteArticle(String nArticle, TableView<Article> tableView) {
         try {
-            statement.executeUpdate("DELETE FROM `article` WHERE " + nArticle);
-            System.out.println("Item deleted!");
+            statement.executeUpdate("DELETE FROM article WHERE NArticle = " + nArticle);
+            tableView.setItems(getTableArticle());
+            Utilities.warningPannel("Félicitation", "Element bien supprimé!", "", Alert.AlertType.INFORMATION);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public static void updateArticle(String nArticle, String columnName, String newValue, boolean isText, TableView tableView) {
+        try {
+            //Checking if the Article doesn't already exist...
+            statement.executeUpdate(isText ? "UPDATE " + articleDbName + " SET " + columnName + " = '" + newValue + "' Where NArticle = " + nArticle + ";"
+                    : "UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
+            tableView.setItems(getTableArticle());
+        } catch (SQLException e) {
+            System.out.println("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
+            e.printStackTrace();
+        }
+    }
+    //endregion
 }
