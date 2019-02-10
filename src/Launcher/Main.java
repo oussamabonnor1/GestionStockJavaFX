@@ -15,7 +15,11 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 1280, 760));
         DbConnection.createConnection();
-        //primaryStage.show();
+        DbConnection.getTableArticle();
+        DbConnection.addArticle("1", "Sabona", "15000", "15");
+        //DbConnection.deleteArticle("2");
+        //DbConnection.getTableArticle();
+        primaryStage.show();
     }
 
 
