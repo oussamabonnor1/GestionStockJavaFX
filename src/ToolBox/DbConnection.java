@@ -1,6 +1,14 @@
 package ToolBox;
 
+import Models.Article;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
+
 import java.sql.*;
+
+import ToolBox.Utilities;
 
 public class DbConnection {
     public static Connection connection;
@@ -21,19 +29,21 @@ public class DbConnection {
         }
     }
 
-    public static void getTableArticle() {
+    public static ObservableList<Article> getTableArticle() {
         rs = null;
+        ObservableList<Article> articles = FXCollections.observableArrayList();
         try {
             rs = statement.executeQuery("Select * FROM " + articleDbName + ";");
             while (rs.next()) {
-                System.out.println("Item: " + rs.getString(1));
+                articles.add(new Article(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getInt(4)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return articles;
     }
 
-    public static void addArticle(String nArticle, String label, String price, String minStock) {
+    public static void addArticle(String nArticle, String label, String price, String minStock, TableView<Article> tableView) {
         rs = null;
         try {
             //Checking if the Article doesn't already exist...
@@ -43,8 +53,8 @@ public class DbConnection {
                 //Inserting new article into database...
                 statement.executeUpdate("INSERT INTO `" + articleDbName + "`(`NArticle`, `Label`, `Price`, `MinStock`)" +
                         " VALUES (" + nArticle + ",'" + label + "'," + price + "," + minStock + ")");
-                System.out.println("Item added!");
-                //TODO: Popup info 10/02/2019
+                tableView.setItems(getTableArticle());
+                Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
             } else { //if article exists already
                 //TODO: Popup info displaying error 10/02/2019
             }

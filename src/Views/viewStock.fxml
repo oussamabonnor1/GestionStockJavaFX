@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerPersonel">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerArticleView">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="10.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="90.0" />
@@ -134,7 +134,7 @@
                                         </HBox>
                               <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#deleteArticle" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer Article" textFill="WHITE">
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteArticle" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer Article" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
