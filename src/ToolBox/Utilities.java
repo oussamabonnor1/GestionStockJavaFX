@@ -69,8 +69,6 @@ public class Utilities {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("launchers/res/img/info.png"));
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() == ButtonType.OK;
     }

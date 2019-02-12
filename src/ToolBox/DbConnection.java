@@ -2,6 +2,7 @@ package ToolBox;
 
 import Models.Article;
 import Models.Client;
+import Models.Fournisseur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -16,6 +17,8 @@ public class DbConnection {
     //narticle, label, price, minstock
     public static String clientDbName = "client";
     //nclient, name, adresse, telephone, fax
+    public static String fournisseurDbName = "fournisseur";
+    //nFournisseur, name, adresse, telephone, fax
     public static ResultSet rs;
 
     public static void createConnection() {
@@ -68,9 +71,10 @@ public class DbConnection {
 
     public static void deleteArticle(String nArticle, TableView<Article> tableView) {
         try {
-            statement.executeUpdate("DELETE FROM article WHERE NArticle = " + nArticle);
-            tableView.setItems(getTableArticle());
-            Utilities.warningPannel("Félicitation", "Element bien supprimé!", "", Alert.AlertType.INFORMATION);
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM article WHERE NArticle = " + nArticle);
+                tableView.setItems(getTableArticle());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -128,9 +132,10 @@ public class DbConnection {
 
     public static void deleteClient(String nClient, TableView<Client> tableView) {
         try {
-            statement.executeUpdate("DELETE FROM client WHERE NClient = " + nClient);
-            tableView.setItems(getTableClients());
-            Utilities.warningPannel("Félicitation", "Element bien supprimé!", "", Alert.AlertType.INFORMATION);
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM client WHERE NClient = " + nClient);
+                tableView.setItems(getTableClients());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -141,7 +146,68 @@ public class DbConnection {
             statement.executeUpdate("UPDATE " + clientDbName + " SET " + columnName + " = " + newValue + " Where NClient = " + nClient + ";");
             tableView.setItems(getTableClients());
         } catch (SQLException e) {
-            System.out.println("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nClient + ";");
+            System.out.println("UPDATE " + clientDbName + " SET " + columnName + " = " + newValue + " Where NClient = " + nClient + ";");
+            e.printStackTrace();
+        }
+    }
+
+    //endregion
+
+    //region Fournisseur
+    public static ObservableList<Fournisseur> getTableFournisseur() {
+        rs = null;
+        ObservableList<Fournisseur> fournisseurs = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + fournisseurDbName + ";");
+            while (rs.next()) {
+                fournisseurs.add(new Fournisseur(rs.getInt(1) + "", rs.getString(2),
+                        rs.getString(3), rs.getInt(4) + "", rs.getInt(5) + ""));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return fournisseurs;
+    }
+
+    public static void addFournisseur(String nFournisseur, String name, String adresse, String telephone, String fax, TableView<Fournisseur> tableView) {
+        rs = null;
+        try {
+            //Checking if the Client doesn't already exist...
+            rs = statement.executeQuery("SELECT * FROM " +
+                    fournisseurDbName + " WHERE NFournisseur = " + nFournisseur + ";");
+            if (!rs.next()) {
+                //Inserting new Client into database...
+                statement.executeUpdate("INSERT INTO " + fournisseurDbName + " (`NFournisseur`, `NomFournisseur`, `Adresse`, `Telephone`, `Fax`)" +
+                        " VALUES (" + nFournisseur + ",'" + name + "','" + adresse + "'," + telephone + "," + fax + ");");
+                tableView.setItems(getTableFournisseur());
+                Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+            } else { //if article exists already
+                Utilities.warningPannel("Erreur!", "Ce Fournisseur existe déja!", "Veuillez vérifier le code introduit...", Alert.AlertType.ERROR);
+            }
+        } catch (SQLException e) {
+            System.out.println("INSERT INTO " + fournisseurDbName + " (`NFournisseur`, `NomFournisseur`, `Adresse`, `Telephone`, `Fax`)" +
+                    " VALUES (" + nFournisseur + ",'" + name + "','" + adresse + "'," + telephone + "," + fax + ");");
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFournisseur(String nFournisseur, TableView<Fournisseur> tableView) {
+        try {
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM " + fournisseurDbName + " WHERE NFournisseur = " + nFournisseur);
+                tableView.setItems(getTableFournisseur());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateFournisseur(String nFournisseur, String columnName, String newValue, TableView tableView) {
+        try {
+            statement.executeUpdate("UPDATE " + fournisseurDbName + " SET " + columnName + " = " + newValue + " Where NFournisseur = " + nFournisseur + ";");
+            tableView.setItems(getTableFournisseur());
+        } catch (SQLException e) {
+            System.out.println("UPDATE " + fournisseurDbName + " SET " + columnName + " = " + newValue + " Where NFournisseur = " + nFournisseur + ";");
             e.printStackTrace();
         }
     }
