@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -61,6 +62,7 @@ public class ControllerPersonel implements Initializable {
         colTelephone.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         colFax.setCellValueFactory(new PropertyValueFactory<>("fax"));
         //Making the columns editable
+        editablesColumns(colClientName, colAdresse, colTelephone, colFax);
         //binding the observables into the table
         tableClient.setItems(clientObservableList);
 
@@ -91,20 +93,43 @@ public class ControllerPersonel implements Initializable {
     }
 
     @FXML
+    void updateClient(TableColumn.CellEditEvent<Client, String> update) {
+        Client clientTemp = tableClient.getSelectionModel().getSelectedItem();
+        TablePosition position = tableClient.getSelectionModel().getSelectedCells().get(0);
+        String columnName = "";
+        boolean isText = false;
+        switch (position.getColumn()) {
+            case 1:
+                columnName = "NomClient";
+                isText = true;
+                break;
+            case 2:
+                columnName = "Adresse";
+                isText = true;
+                break;
+            case 3:
+                columnName = "Telephone";
+                break;
+            case 4:
+                columnName = "Fax";
+                break;
+        }
+        DbConnection.updateClient(clientTemp.getnClient(), columnName,
+                isText ? "'" + update.getNewValue() + "'"
+                        : update.getNewValue() //adding a literal or numeric value?
+                , tableClient);
+    }
+
+    @FXML
     void articleViewSelected(MouseEvent event) {
 
     }
-
 
     @FXML
     void shopViewSelected(MouseEvent event) {
 
     }
 
-    @FXML
-    void updateArticle(ActionEvent event) {
-
-    }
     //endregion
 
 }

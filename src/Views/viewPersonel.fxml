@@ -145,12 +145,12 @@
                                 <columns>
                                     <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
                                     <TableColumn fx:id="colCLientNum" editable="false" prefWidth="128.0" text="NClient" />
-                        <TableColumn fx:id="colClientName" onEditCommit="#updateArticle" prefWidth="190.0" text="Nom client" />
+                        <TableColumn fx:id="colClientName" onEditCommit="#updateClient" prefWidth="190.0" text="Nom client" />
 
                                     <!--<TableColumn fx:id="colNumeroSerie" prefWidth="150.0" text="Numero de Serie" />-->
-                                    <TableColumn fx:id="colAdresse" onEditCommit="#updateArticle" prefWidth="190.0" text="Adresse" />
-                                    <TableColumn fx:id="colTelephone" onEditCommit="#updateArticle" prefWidth="75.0" text="Telephone" />
-                                    <TableColumn fx:id="colFax" onEditCommit="#updateArticle" prefWidth="169.0" text="Fax" />
+                                    <TableColumn fx:id="colAdresse" onEditCommit="#updateClient" prefWidth="190.0" text="Adresse" />
+                                    <TableColumn fx:id="colTelephone" onEditCommit="#updateClient" prefWidth="75.0" text="Telephone" />
+                                    <TableColumn fx:id="colFax" onEditCommit="#updateClient" prefWidth="169.0" text="Fax" />
 
                                 </columns>
                                 <columnResizePolicy>
@@ -163,10 +163,10 @@
                   <TableView fx:id="tableFournisseur" editable="true" prefHeight="260.0" prefWidth="1035.0" style="-fx-border-color: #404040;">
                      <columns>
                         <TableColumn fx:id="colFournisseurNum" editable="false" prefWidth="128.0" text="NFournisseur" />
-                        <TableColumn fx:id="colNameFournisseur" onEditCommit="#updateArticle" prefWidth="190.0" text="Nom Fournisseur" />
-                        <TableColumn fx:id="colAdresseFournisseur" onEditCommit="#updateArticle" prefWidth="190.0" text="Adresse" />
-                        <TableColumn fx:id="colTelephoneFournisseur" onEditCommit="#updateArticle" prefWidth="75.0" text="Telephone" />
-                        <TableColumn fx:id="colFaxFournisseur" onEditCommit="#updateArticle" prefWidth="169.0" text="Fax" />
+                        <TableColumn fx:id="colNameFournisseur" onEditCommit="#updateClient" prefWidth="190.0" text="Nom Fournisseur" />
+                        <TableColumn fx:id="colAdresseFournisseur" onEditCommit="#updateClient" prefWidth="190.0" text="Adresse" />
+                        <TableColumn fx:id="colTelephoneFournisseur" onEditCommit="#updateClient" prefWidth="75.0" text="Telephone" />
+                        <TableColumn fx:id="colFaxFournisseur" onEditCommit="#updateClient" prefWidth="169.0" text="Fax" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
