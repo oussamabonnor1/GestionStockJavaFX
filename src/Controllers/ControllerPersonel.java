@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.Article;
 import Models.Client;
 import Models.Fournisseur;
 import ToolBox.DbConnection;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -19,7 +21,7 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static ToolBox.Utilities.numericLimitedTextField;
+import static ToolBox.Utilities.*;
 
 public class ControllerPersonel implements Initializable {
 
@@ -69,7 +71,23 @@ public class ControllerPersonel implements Initializable {
     //region Functions
     @FXML
     void AddPerson(ActionEvent event) {
+        //inputChecking makes sure that all the fields are filled...
+        if (inputChecking(textFieldName, textFieldNumero, textFieldTelephone, textFieldFax)) {
+            DbConnection.addClient(textFieldNumero.getText(), textFieldName.getText(), textFieldAdresse.getText(), textFieldTelephone.getText(), textFieldFax.getText(), tableClient);
+            inputDeleting(textFieldName, textFieldNumero, textFieldTelephone, textFieldFax); //Clearing out the input UI
+        } else {
+            warningPannel("Erreur!", "Un ou plusieurs champs sont vide!", "Remplissez tout les champs SVP..", Alert.AlertType.ERROR);
+        }
+    }
 
+    @FXML
+    void deletePerson(ActionEvent event) {
+        Client clientToDelete = tableClient.getSelectionModel().getSelectedItem();
+        if (clientToDelete != null) {
+            DbConnection.deleteClient(clientToDelete.getnClient() + "", tableClient);
+        } else {
+            warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un client SVP..", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
@@ -77,10 +95,6 @@ public class ControllerPersonel implements Initializable {
 
     }
 
-    @FXML
-    void deletePerson(ActionEvent event) {
-
-    }
 
     @FXML
     void shopViewSelected(MouseEvent event) {

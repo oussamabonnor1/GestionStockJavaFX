@@ -13,7 +13,9 @@ public class DbConnection {
     public static Connection connection;
     public static Statement statement;
     public static String articleDbName = "article";
+    //narticle, label, price, minstock
     public static String clientDbName = "client";
+    //nclient, name, adresse, telephone, fax
     public static ResultSet rs;
 
     public static void createConnection() {
@@ -76,7 +78,6 @@ public class DbConnection {
 
     public static void updateArticle(String nArticle, String columnName, String newValue, TableView tableView) {
         try {
-            //Checking if the Article doesn't already exist...
             statement.executeUpdate("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
             tableView.setItems(getTableArticle());
         } catch (SQLException e) {
@@ -102,47 +103,48 @@ public class DbConnection {
         }
         return clients;
     }
-/*
-    public static void addArticle(String nArticle, String label, String price, String minStock, TableView<Article> tableView) {
+
+    public static void addClient(String nClient, String name, String adresse, String telephone, String fax, TableView<Client> tableView) {
         rs = null;
         try {
-            //Checking if the Article doesn't already exist...
+            //Checking if the Client doesn't already exist...
             rs = statement.executeQuery("SELECT * FROM " +
-                    articleDbName + " WHERE NArticle = " + nArticle + ";");
+                    clientDbName + " WHERE NClient = " + nClient + ";");
             if (!rs.next()) {
-                //Inserting new article into database...
-                statement.executeUpdate("INSERT INTO `" + articleDbName + "`(`NArticle`, `Label`, `Price`, `MinStock`)" +
-                        " VALUES (" + nArticle + ",'" + label + "'," + price + "," + minStock + ")");
-                tableView.setItems(getTableArticle());
+                //Inserting new Client into database...
+                statement.executeUpdate("INSERT INTO " + clientDbName + " (`NClient`, `NomClient`, `Adresse`, `Telephone`, `Fax`)" +
+                        " VALUES (" + nClient + ",'" + name + "','" + adresse + "'," + telephone + "," + fax + ");");
+                tableView.setItems(getTableClients());
                 Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
             } else { //if article exists already
-                Utilities.warningPannel("Erreur!", "Cet article existe déja!", "Veuillez vérifier le code introduit...", Alert.AlertType.ERROR);
+                Utilities.warningPannel("Erreur!", "Ce client existe déja!", "Veuillez vérifier le code introduit...", Alert.AlertType.ERROR);
             }
         } catch (SQLException e) {
+            System.out.println("INSERT INTO `" + clientDbName + "(`NClient`, `NomClient`, `Adresse`, `Telephone`, `Fax`)" +
+                    " VALUES (" + nClient + ",'" + name + "','" + adresse + "'," + telephone + "," + fax + ");");
             e.printStackTrace();
         }
     }
 
-    public static void deleteArticle(String nArticle, TableView<Article> tableView) {
+    public static void deleteClient(String nClient, TableView<Client> tableView) {
         try {
-            statement.executeUpdate("DELETE FROM article WHERE NArticle = " + nArticle);
-            tableView.setItems(getTableArticle());
+            statement.executeUpdate("DELETE FROM client WHERE NClient = " + nClient);
+            tableView.setItems(getTableClients());
             Utilities.warningPannel("Félicitation", "Element bien supprimé!", "", Alert.AlertType.INFORMATION);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void updateArticle(String nArticle, String columnName, String newValue, TableView tableView) {
+    public static void updateClient(String nClient, String columnName, String newValue, TableView tableView) {
         try {
-            //Checking if the Article doesn't already exist...
-            statement.executeUpdate("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
-            tableView.setItems(getTableArticle());
+            statement.executeUpdate("UPDATE " + clientDbName + " SET " + columnName + " = " + newValue + " Where NClient = " + nClient + ";");
+            tableView.setItems(getTableClients());
         } catch (SQLException e) {
-            System.out.println("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
+            System.out.println("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nClient + ";");
             e.printStackTrace();
         }
     }
-    */
+
     //endregion
 }
