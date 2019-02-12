@@ -3,6 +3,7 @@ package ToolBox;
 import Models.Article;
 import Models.Client;
 import Models.Fournisseur;
+import Models.Stock;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -11,14 +12,16 @@ import javafx.scene.control.TableView;
 import java.sql.*;
 
 public class DbConnection {
-    public static Connection connection;
-    public static Statement statement;
+    private static Connection connection;
+    private static Statement statement;
     public static String articleDbName = "article";
     //narticle, label, price, minstock
     public static String clientDbName = "client";
     //nclient, name, adresse, telephone, fax
     public static String fournisseurDbName = "fournisseur";
     //nFournisseur, name, adresse, telephone, fax
+    public static String stockDbName = "stock";
+    //NArticle , Date , QntA, Qntl, Stock
     public static ResultSet rs;
 
     public static void createConnection() {
@@ -90,7 +93,6 @@ public class DbConnection {
         }
     }
     //endregion
-
 
     //region Clients
     public static ObservableList<Client> getTableClients() {
@@ -208,6 +210,67 @@ public class DbConnection {
             tableView.setItems(getTableFournisseur());
         } catch (SQLException e) {
             System.out.println("UPDATE " + fournisseurDbName + " SET " + columnName + " = " + newValue + " Where NFournisseur = " + nFournisseur + ";");
+            e.printStackTrace();
+        }
+    }
+
+    //endregion
+
+    //region Stock
+    private static ObservableList<Stock> getTableStock() {
+        rs = null;
+        ObservableList<Stock> stocks = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + stockDbName + ";");
+            while (rs.next()) {
+                stocks.add(new Stock(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(3) + "", rs.getInt(4) + "", rs.getInt(5) + ""));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stocks;
+    }
+
+    public static void addStock(String nArticle, String date, String qntA, String qntL, String stock, TableView<Stock> tableView) {
+        rs = null;
+        try {
+            //Checking if the Stock doesn't already exist...
+            //rs = statement.executeQuery("SELECT * FROM " +
+            //      stockDbName + " WHERE NArticle = " + nArticle + ";");
+            if (!rs.next()) {
+                //Inserting new Client into database...
+                statement.executeUpdate("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
+                        " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
+                tableView.setItems(getTableStock());
+                Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+            } else { //if article exists already
+                Utilities.warningPannel("Erreur!", "Ce Stock existe déja!", "Veuillez vérifier le code introduit...", Alert.AlertType.ERROR);
+            }
+        } catch (SQLException e) {
+            System.out.println("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
+                    " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteStock(String nArticle, TableView<Stock> tableView) {
+        try {
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM " + stockDbName + " WHERE NArticle= " + nArticle);
+                tableView.setItems(getTableStock());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateStock(String nArticle, String columnName, String newValue, TableView<Stock> tableView) {
+        try {
+            statement.executeUpdate("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " Where NArticle= " + nArticle + ";");
+            tableView.setItems(getTableStock());
+        } catch (SQLException e) {
+            System.out.println("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " Where NArticle= " + nArticle + ";");
             e.printStackTrace();
         }
     }
