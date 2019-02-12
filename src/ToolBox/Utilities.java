@@ -5,10 +5,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -181,6 +179,12 @@ public class Utilities {
             return true;
         } catch (ParseException e) {
             return false;
+        }
+    }
+
+    public static void editablesColumns(TableColumn... columns){
+        for (TableColumn tableColumn : columns){
+            tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         }
     }
 }

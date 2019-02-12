@@ -1,22 +1,21 @@
 package Launcher;
 
-import ToolBox.DbConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class Main extends Application {
-
+public class Launcher extends Application {
+    public static Stage stage;
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../Views/viewStock.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 1280, 760));
-        //DbConnection.deleteArticle("2");
-        //DbConnection.getTableArticle();
-        primaryStage.show();
+        stage = primaryStage;
+        stage.setTitle("Stock management");
+        stage.setScene(new Scene(root, 1360, 680));
+        stage.show();
     }
 
 

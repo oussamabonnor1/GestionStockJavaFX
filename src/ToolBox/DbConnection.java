@@ -1,6 +1,7 @@
 package ToolBox;
 
 import Models.Article;
+import Models.Client;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -12,6 +13,7 @@ public class DbConnection {
     public static Connection connection;
     public static Statement statement;
     public static String articleDbName = "article";
+    public static String clientDbName = "client";
     public static ResultSet rs;
 
     public static void createConnection() {
@@ -72,16 +74,75 @@ public class DbConnection {
         }
     }
 
-    public static void updateArticle(String nArticle, String columnName, String newValue, boolean isText, TableView tableView) {
+    public static void updateArticle(String nArticle, String columnName, String newValue, TableView tableView) {
         try {
             //Checking if the Article doesn't already exist...
-            statement.executeUpdate(isText ? "UPDATE " + articleDbName + " SET " + columnName + " = '" + newValue + "' Where NArticle = " + nArticle + ";"
-                    : "UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
+            statement.executeUpdate("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
             tableView.setItems(getTableArticle());
         } catch (SQLException e) {
             System.out.println("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
             e.printStackTrace();
         }
     }
+    //endregion
+
+
+    //region Clients
+    public static ObservableList<Client> getTableClients() {
+        rs = null;
+        ObservableList<Client> clients = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + clientDbName + ";");
+            while (rs.next()) {
+                clients.add(new Client(rs.getInt(1) + "", rs.getString(2),
+                        rs.getString(3), rs.getInt(4) + "", rs.getInt(5) + ""));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clients;
+    }
+/*
+    public static void addArticle(String nArticle, String label, String price, String minStock, TableView<Article> tableView) {
+        rs = null;
+        try {
+            //Checking if the Article doesn't already exist...
+            rs = statement.executeQuery("SELECT * FROM " +
+                    articleDbName + " WHERE NArticle = " + nArticle + ";");
+            if (!rs.next()) {
+                //Inserting new article into database...
+                statement.executeUpdate("INSERT INTO `" + articleDbName + "`(`NArticle`, `Label`, `Price`, `MinStock`)" +
+                        " VALUES (" + nArticle + ",'" + label + "'," + price + "," + minStock + ")");
+                tableView.setItems(getTableArticle());
+                Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+            } else { //if article exists already
+                Utilities.warningPannel("Erreur!", "Cet article existe déja!", "Veuillez vérifier le code introduit...", Alert.AlertType.ERROR);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteArticle(String nArticle, TableView<Article> tableView) {
+        try {
+            statement.executeUpdate("DELETE FROM article WHERE NArticle = " + nArticle);
+            tableView.setItems(getTableArticle());
+            Utilities.warningPannel("Félicitation", "Element bien supprimé!", "", Alert.AlertType.INFORMATION);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateArticle(String nArticle, String columnName, String newValue, TableView tableView) {
+        try {
+            //Checking if the Article doesn't already exist...
+            statement.executeUpdate("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
+            tableView.setItems(getTableArticle());
+        } catch (SQLException e) {
+            System.out.println("UPDATE " + articleDbName + " SET " + columnName + " = " + newValue + " Where NArticle = " + nArticle + ";");
+            e.printStackTrace();
+        }
+    }
+    */
     //endregion
 }

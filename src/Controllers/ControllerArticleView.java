@@ -1,22 +1,23 @@
 package Controllers;
 
+import Launcher.Launcher;
 import Models.Article;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -50,9 +51,7 @@ public class ControllerArticleView implements Initializable {
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         colMinStock.setCellValueFactory(new PropertyValueFactory<>("minStock"));
         //Making the columns editable
-        colLabel.setCellFactory(TextFieldTableCell.forTableColumn());
-        colPrice.setCellFactory(TextFieldTableCell.forTableColumn());
-        colMinStock.setCellFactory(TextFieldTableCell.forTableColumn());
+        editablesColumns(colLabel, colPrice, colMinStock);
         //binding the observables into the table
         tableArticle.setItems(articleObservableList);
 
@@ -100,12 +99,22 @@ public class ControllerArticleView implements Initializable {
                 columnName = "MinStock";
                 break;
         }
-        DbConnection.updateArticle(tempArticle.getnArticle(), columnName, produitStringCellEditEvent.getNewValue(), isText, tableArticle);
+        DbConnection.updateArticle(tempArticle.getnArticle(), columnName,
+                isText ? "'" + produitStringCellEditEvent.getNewValue() + "'"
+                        : produitStringCellEditEvent.getNewValue() //adding a literal or numeric value?
+                , tableArticle);
     }
 
     @FXML
     void clientViewSelected(MouseEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewPersonel.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
