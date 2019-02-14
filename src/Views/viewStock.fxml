@@ -27,7 +27,7 @@
     <children>
         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #38386E;" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
             <children>
-                <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #55A8FD;">
+                <HBox alignment="CENTER" fillHeight="false" onMouseClicked="#articleViewSelected" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -39,7 +39,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </HBox>
-                <HBox alignment="CENTER" fillHeight="false" onMouseClicked="#shopViewSelected" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #55A8FD;">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -97,15 +97,16 @@
                             <children>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1115.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <TableView fx:id="tableArticle" editable="true" prefHeight="260.0" prefWidth="1035.0" style="-fx-border-color: #404040;" VBox.vgrow="ALWAYS">
+                                        <TableView fx:id="tableStock" editable="true" prefHeight="260.0" prefWidth="1035.0" stylesheets="@CSS/stylesheet.css" VBox.vgrow="ALWAYS">
                                             <columns>
                                                 <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
-                                                <TableColumn fx:id="colnArticle" editable="false" prefWidth="128.0" text="id" />
+                                                <TableColumn fx:id="colnArticle" editable="false" prefWidth="128.0" text="N Article" />
 
                                                 <!--<TableColumn fx:id="colNumeroSerie" prefWidth="150.0" text="Numero de Serie" />-->
-                                                <TableColumn fx:id="colLabel" onEditCommit="#updateArticle" prefWidth="190.0" text="Libelle" />
-                                                <TableColumn fx:id="colPrice" onEditCommit="#updateArticle" prefWidth="75.0" text="Prix Unit" />
-                                                <TableColumn fx:id="colMinStock" onEditCommit="#updateArticle" prefWidth="169.0" text="Stock min" />
+                                                <TableColumn fx:id="colDate" onEditCommit="#updateArticle" prefWidth="190.0" text="Date" />
+                                                <TableColumn fx:id="colQntA" onEditCommit="#updateArticle" prefWidth="75.0" text="Qnt A" />
+                                                <TableColumn fx:id="colQntL" onEditCommit="#updateArticle" prefWidth="169.0" text="Qnt L" />
+                                    <TableColumn fx:id="colStock" onEditCommit="#updateArticle" prefWidth="169.0" text="Stock" />
 
                                             </columns>
                                             <columnResizePolicy>

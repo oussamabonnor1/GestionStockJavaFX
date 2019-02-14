@@ -4,14 +4,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
     public static Stage stage;
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("../Views/viewStock.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../Views/viewArticle.fxml"));
         stage = primaryStage;
         stage.setTitle("Stock management");
         stage.setScene(new Scene(root, 1360, 680));

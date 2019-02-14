@@ -169,7 +169,7 @@ public class ControllerPersonel implements Initializable {
     @FXML
     void articleViewSelected(MouseEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewStock.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewArticle.fxml"));
             Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
             Launcher.stage.setScene(scene);
 

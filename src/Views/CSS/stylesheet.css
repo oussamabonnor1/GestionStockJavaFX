@@ -1,0 +1,14 @@
+
+.table-view {
+    -fx-background-color: #FFF;
+    -fx-table-cell-border-color: #38386E;
+    -fx-table-header-border-color: #38386E;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: #38386E;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+}

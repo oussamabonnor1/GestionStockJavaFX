@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -14,9 +15,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerPersonel">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerArticleView">
     <columnConstraints>
-        <ColumnConstraints fx:nArticle="sideMenu" hgrow="ALWAYS" minWidth="10.0" percentWidth="10.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="10.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="90.0" />
     </columnConstraints>
     <rowConstraints>
@@ -26,19 +27,19 @@
     <children>
         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #38386E;" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
             <children>
-            <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #38386E;">
-               <children>
-                  <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Resource/editWhite.png" />
-                     </image>
-                  </ImageView>
-               </children>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </HBox>
                 <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #55A8FD;">
+                    <children>
+                        <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../Resource/editWhite.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </HBox>
+                <HBox alignment="CENTER" fillHeight="false" onMouseClicked="#shopViewSelected" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -53,7 +54,7 @@
                         <Insets />
                     </VBox.margin>
                 </HBox>
-                <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" fillHeight="false" onMouseClicked="#clientViewSelected" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -96,19 +97,16 @@
                             <children>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1115.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <TableView fx:nArticle="tableCommande" prefHeight="260.0" prefWidth="1035.0" style="-fx-border-color: #404040;" VBox.vgrow="ALWAYS">
+                                        <TableView fx:id="tableArticle" editable="true" prefHeight="260.0" prefWidth="1035.0" stylesheets="@CSS/stylesheet.css" VBox.vgrow="ALWAYS">
                                             <columns>
-                                                <!--<TableColumn fx:nArticle="colDesignation" prefWidth="75.0" text="Designation" />-->
-                                                <TableColumn fx:nArticle="colCode" prefWidth="128.0" text="NArticle" />
-      
-                                                <!--<TableColumn fx:nArticle="colNumeroSerie" prefWidth="150.0" text="Numero de Serie" />-->
-                                                <TableColumn fx:nArticle="colMontant" prefWidth="190.0" text="Montant" />
-                                                <TableColumn fx:nArticle="colDate1erVersement" prefWidth="75.0" text="Date 1er Vers" />
-                                                <TableColumn fx:nArticle="colDateVersementFinale" prefWidth="169.0" text="Date Vers finale" />
-                                                <TableColumn fx:nArticle="colMoisRestants" prefWidth="150.0" text="Mois Restant" />
-      
-                                                <TableColumn fx:nArticle="colQuantite" prefWidth="150.0" text="QNT" />
-      
+                                                <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
+                                                <TableColumn fx:id="colnArticle" editable="false" prefWidth="128.0" text="id" />
+
+                                                <!--<TableColumn fx:id="colNumeroSerie" prefWidth="150.0" text="Numero de Serie" />-->
+                                                <TableColumn fx:id="colLabel" onEditCommit="#updateArticle" prefWidth="190.0" text="Libelle" />
+                                                <TableColumn fx:id="colPrice" onEditCommit="#updateArticle" prefWidth="75.0" text="Prix Unit" />
+                                                <TableColumn fx:id="colMinStock" onEditCommit="#updateArticle" prefWidth="169.0" text="Stock min" />
+
                                             </columns>
                                             <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -117,31 +115,30 @@
                                                 <Insets left="30.0" right="50.0" />
                                             </VBox.margin>
                                         </TableView>
+                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                            <children>
+                                                <JFXTextField fx:id="textFieldNArticle" alignment="CENTER" focusColor="#55a8fd" promptText="Num Article" unFocusColor="#38386e" />
+                                                <JFXTextField fx:id="textFieldLabel" alignment="CENTER" focusColor="#55a8fd" promptText="Libelle" unFocusColor="#38386e" />
+                                                <JFXTextField fx:id="textFieldPrice" alignment="CENTER" focusColor="#55a8fd" promptText="Prix" unFocusColor="#38386e" />
+                                                <JFXTextField fx:id="textFieldMinStock" alignment="CENTER" focusColor="#55a8fd" promptText="Stock min" unFocusColor="#38386e" />
+                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#addArticle" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Ajouter article" textFill="WHITE">
+                                                    <graphic>
+                                                        <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../Resource/editWhite.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                    </graphic>
+                                                </Button>
+                                            </children>
+                                        </HBox>
                                         <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
                                             <children>
-                                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer commande" textFill="WHITE">
+                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteArticle" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer Article" textFill="WHITE">
                                                     <graphic>
                                                         <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../Resource/home.png" />
-                                                            </image>
-                                                        </ImageView>
-                                                    </graphic>
-                                                </Button>
-                                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Exporter Excel" textFill="WHITE">
-                                                    <graphic>
-                                                        <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@../Resource/home.png" />
-                                                            </image>
-                                                        </ImageView>
-                                                    </graphic>
-                                                </Button>
-                                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Imprimer Liste" textFill="WHITE">
-                                                    <graphic>
-                                                        <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@../Resource/home.png" />
+                                                                <Image url="@../Resource/delWhite.png" />
                                                             </image>
                                                         </ImageView>
                                                     </graphic>
@@ -149,19 +146,19 @@
                                             </children>
                                         </HBox>
                                     </children>
-                           <effect>
-                              <DropShadow color="#0000008a" height="18.0" radius="8.5" width="18.0" />
-                           </effect>
+                                    <effect>
+                                        <DropShadow color="#0000008a" height="18.0" radius="8.5" width="18.0" />
+                                    </effect>
                                 </VBox>
                             </children>
                         </HBox>
                     </children>
-               <GridPane.margin>
-                  <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-               </GridPane.margin>
-               <padding>
-                  <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-               </padding>
+                    <GridPane.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                    </GridPane.margin>
+                    <padding>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                    </padding>
                 </VBox>
             </children>
         </GridPane>
