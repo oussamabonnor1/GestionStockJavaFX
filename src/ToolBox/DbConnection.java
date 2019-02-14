@@ -217,7 +217,7 @@ public class DbConnection {
     //endregion
 
     //region Stock
-    private static ObservableList<Stock> getTableStock() {
+    public static ObservableList<Stock> getTableStock() {
         rs = null;
         ObservableList<Stock> stocks = FXCollections.observableArrayList();
         try {

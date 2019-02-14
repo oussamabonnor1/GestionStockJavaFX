@@ -37,13 +37,11 @@ public class ControllerArticleView implements Initializable {
     private ObservableList<Article> articleObservableList = FXCollections.observableArrayList();
     //endregion
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DbConnection.createConnection();
         //fetching all articles into observableList
         articleObservableList = DbConnection.getTableArticle();
-
         //Binding the columns with the model's variables
         colnArticle.setCellValueFactory(new PropertyValueFactory<>("nArticle"));
         colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));
@@ -53,7 +51,6 @@ public class ControllerArticleView implements Initializable {
         editablesColumns(colLabel, colPrice, colMinStock);
         //binding the observables into the table
         tableArticle.setItems(articleObservableList);
-
         //Making the inputs accept numeric values only (limit: 10)
         numericLimitedTextField(10, textFieldNArticle, textFieldPrice, textFieldMinStock);
     }
@@ -81,7 +78,7 @@ public class ControllerArticleView implements Initializable {
     }
 
     @FXML
-    void updateArticle(TableColumn.CellEditEvent<Article, String> produitStringCellEditEvent) {
+    void updateArticle(TableColumn.CellEditEvent<Article, String> update) {
         Article tempArticle = tableArticle.getSelectionModel().getSelectedItem();
         TablePosition position = tableArticle.getSelectionModel().getSelectedCells().get(0);
         String columnName = "";
@@ -99,8 +96,8 @@ public class ControllerArticleView implements Initializable {
                 break;
         }
         DbConnection.updateArticle(tempArticle.getnArticle(), columnName,
-                isText ? "'" + produitStringCellEditEvent.getNewValue() + "'"
-                        : produitStringCellEditEvent.getNewValue() //adding a literal or numeric value?
+                isText ? "'" + update.getNewValue() + "'"
+                        : update.getNewValue() //adding a literal or numeric value?
                 , tableArticle);
     }
 
@@ -110,17 +107,21 @@ public class ControllerArticleView implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource("/Views/viewPersonel.fxml"));
             Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
             Launcher.stage.setScene(scene);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    void shopViewSelected(MouseEvent event) {
-
+    void stockViewSelected(MouseEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewStock.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
     //endregion
 
 }
