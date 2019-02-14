@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -15,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerArticleView">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerShop">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="10.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="90.0" />
@@ -103,10 +102,10 @@
                                                 <TableColumn fx:id="colnArticle" editable="false" prefWidth="128.0" text="N Article" />
 
                                                 <!--<TableColumn fx:id="colNumeroSerie" prefWidth="150.0" text="Numero de Serie" />-->
-                                                <TableColumn fx:id="colDate" onEditCommit="#updateArticle" prefWidth="190.0" text="Date" />
-                                                <TableColumn fx:id="colQntA" onEditCommit="#updateArticle" prefWidth="75.0" text="Qnt A" />
-                                                <TableColumn fx:id="colQntL" onEditCommit="#updateArticle" prefWidth="169.0" text="Qnt L" />
-                                    <TableColumn fx:id="colStock" onEditCommit="#updateArticle" prefWidth="169.0" text="Stock" />
+                                                <TableColumn fx:id="colDate" onEditCommit="#updateStock" prefWidth="190.0" text="Date" />
+                                                <TableColumn fx:id="colQntA" onEditCommit="#updateStock" prefWidth="75.0" text="Qnt A" />
+                                                <TableColumn fx:id="colQntL" onEditCommit="#updateStock" prefWidth="169.0" text="Qnt L" />
+                                    <TableColumn fx:id="colStock" onEditCommit="#updateStock" prefWidth="169.0" text="Stock" />
 
                                             </columns>
                                             <columnResizePolicy>
@@ -116,26 +115,9 @@
                                                 <Insets left="30.0" right="50.0" />
                                             </VBox.margin>
                                         </TableView>
-                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                                            <children>
-                                                <JFXTextField fx:id="textFieldNArticle" alignment="CENTER" focusColor="#55a8fd" promptText="Num Article" unFocusColor="#38386e" />
-                                                <JFXTextField fx:id="textFieldLabel" alignment="CENTER" focusColor="#55a8fd" promptText="Libelle" unFocusColor="#38386e" />
-                                                <JFXTextField fx:id="textFieldPrice" alignment="CENTER" focusColor="#55a8fd" promptText="Prix" unFocusColor="#38386e" />
-                                                <JFXTextField fx:id="textFieldMinStock" alignment="CENTER" focusColor="#55a8fd" promptText="Stock min" unFocusColor="#38386e" />
-                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#addArticle" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Ajouter article" textFill="WHITE">
-                                                    <graphic>
-                                                        <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@../Resource/editWhite.png" />
-                                                            </image>
-                                                        </ImageView>
-                                                    </graphic>
-                                                </Button>
-                                            </children>
-                                        </HBox>
                                         <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
                                             <children>
-                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteArticle" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer Article" textFill="WHITE">
+                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteStock" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer Article" textFill="WHITE">
                                                     <graphic>
                                                         <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
