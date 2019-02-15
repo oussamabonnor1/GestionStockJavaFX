@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 import static ToolBox.Utilities.*;
 
-public class ControllerArticleView implements Initializable {
+public class ControllerArticle implements Initializable {
 
     //region Variables
     @FXML
