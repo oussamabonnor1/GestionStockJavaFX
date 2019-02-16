@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 import static ToolBox.Utilities.editablesColumns;
 import static ToolBox.Utilities.warningPannel;
 
-public class ControllerShop implements Initializable {
+public class ControllerStock implements Initializable {
 
     //region Variables
     @FXML

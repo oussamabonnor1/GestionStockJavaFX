@@ -1,9 +1,6 @@
 package ToolBox;
 
-import Models.Article;
-import Models.Client;
-import Models.Fournisseur;
-import Models.Stock;
+import Models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -22,6 +19,8 @@ public class DbConnection {
     //nFournisseur, name, adresse, telephone, fax
     public static String stockDbName = "stock";
     //NArticle , Date , QntA, Qntl, Stock
+    public static String approvisiontDbName = "approvisiont";
+    //NBonA, Date, NFournisseur
     public static ResultSet rs;
 
     public static void createConnection() {
@@ -235,18 +234,11 @@ public class DbConnection {
     public static void addStock(String nArticle, String date, String qntA, String qntL, String stock, TableView<Stock> tableView) {
         rs = null;
         try {
-            //Checking if the Stock doesn't already exist...
-            //rs = statement.executeQuery("SELECT * FROM " +
-            //      stockDbName + " WHERE NArticle = " + nArticle + ";");
-            if (!rs.next()) {
-                //Inserting new Client into database...
-                statement.executeUpdate("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
-                        " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
-                tableView.setItems(getTableStock());
-                Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
-            } else { //if article exists already
-                Utilities.warningPannel("Erreur!", "Ce Stock existe déja!", "Veuillez vérifier le code introduit...", Alert.AlertType.ERROR);
-            }
+            //Inserting new Client into database...
+            statement.executeUpdate("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
+                    " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
+            tableView.setItems(getTableStock());
+            Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
         } catch (SQLException e) {
             System.out.println("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
                     " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
@@ -276,4 +268,59 @@ public class DbConnection {
     }
 
     //endregion
+
+    //region Approvisiont
+    public static ObservableList<Approvisiont> getTableApprovisiont() {
+        rs = null;
+        ObservableList<Approvisiont> approvisionts = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + approvisiontDbName + ";");
+            while (rs.next()) {
+                approvisionts.add(new Approvisiont(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(3) + ""));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return approvisionts;
+    }
+
+    public static void addApprovisiont(String nBonA, String date, String nFournisseur, TableView<Approvisiont> tableView) {
+        rs = null;
+        try {
+            //Inserting new Client into database...
+            statement.executeUpdate("INSERT INTO " + approvisiontDbName + " (`NBonA`, `Date`, `NFournisseur`)" +
+                    " VALUES (" + nBonA + ",'" + date + "'," + nFournisseur + ");");
+            tableView.setItems(getTableApprovisiont());
+            Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+        } catch (SQLException e) {
+            System.out.println("INSERT INTO " + approvisiontDbName + " (`NBonA`, `Date`, `NFournisseur`)" +
+                    " VALUES (" + nBonA + ",'" + date + "'," + nFournisseur + ");");
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteApprovisiont(String nBonA, TableView<Approvisiont> tableView) {
+        try {
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM " + approvisiontDbName + " WHERE NBonA = " + nBonA);
+                tableView.setItems(getTableApprovisiont());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateApprovisiont(String nBonA, String columnName, String newValue, TableView<Approvisiont> tableView) {
+        try {
+            statement.executeUpdate("UPDATE " + approvisiontDbName + " SET " + columnName + " = " + newValue + " Where NBonA= " + nBonA + ";");
+            tableView.setItems(getTableApprovisiont());
+        } catch (SQLException e) {
+            System.out.println("UPDATE " + approvisiontDbName + " SET " + columnName + " = " + newValue + " Where NBonA= " + nBonA + ";");
+            e.printStackTrace();
+        }
+    }
+
+    //endregion
+
 }

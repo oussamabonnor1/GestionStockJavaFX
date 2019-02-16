@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -16,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerShop">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerStock">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="10.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="90.0" />
@@ -70,7 +74,7 @@
                         <Insets left="-1.0" />
                     </VBox.margin>
                 </HBox>
-                <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" fillHeight="false" onMouseClicked="#receiptViewSelected" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -98,7 +102,7 @@
                             <children>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1115.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                     <children>
-                              <Label alignment="CENTER" text="Les Articles" textAlignment="CENTER" underline="true">
+                              <Label alignment="CENTER" text="Les Stock" textAlignment="CENTER" underline="true">
                                  <font>
                                     <Font name="Bookshelf Symbol 7" size="28.0" />
                                  </font>
@@ -119,22 +123,58 @@
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                             </columnResizePolicy>
                                             <VBox.margin>
-                                                <Insets left="30.0" right="50.0" />
+                                                <Insets bottom="20.0" left="30.0" right="30.0" />
                                             </VBox.margin>
                                         </TableView>
-                                        <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
-                                            <children>
-                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteStock" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer Article" textFill="WHITE">
-                                                    <graphic>
-                                                        <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@../Resource/delWhite.png" />
-                                                            </image>
-                                                        </ImageView>
-                                                    </graphic>
-                                                </Button>
-                                            </children>
-                                        </HBox>
+                              <VBox disable="true" prefHeight="128.0" prefWidth="1052.0" style="-fx-background-color: #FFF;">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="69.0" prefWidth="1102.0" spacing="10.0">
+                                       <children>
+                                          <JFXTextField fx:id="textFieldNumero" alignment="CENTER" focusColor="#55a8fd" promptText="Numero" unFocusColor="#38386e" />
+                                          <JFXTextField fx:id="textFieldName" alignment="CENTER" focusColor="#55a8fd" promptText="Nom" unFocusColor="#38386e" />
+                                          <JFXTextField fx:id="textFieldAdresse" alignment="CENTER" focusColor="#55a8fd" promptText="Adresse" unFocusColor="#38386e" />
+                                          <JFXTextField fx:id="textFieldTelephone" alignment="CENTER" focusColor="#55a8fd" promptText="Telephone" unFocusColor="#38386e" />
+                                          <JFXTextField fx:id="textFieldFax" alignment="CENTER" focusColor="#55a8fd" promptText="Fax" unFocusColor="#38386e" />
+                                          <JFXComboBox fx:id="comboBoxType" focusColor="#56b6fc" prefHeight="31.0" prefWidth="153.0" promptText="Choisir type" unFocusColor="#38386e">
+                                             <padding>
+                                                <Insets left="10.0" />
+                                             </padding>
+                                             <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                   <String fx:id="client" fx:value="Client" />
+                                                   <String fx:id="fournisseur" fx:value="Fournisseur" />
+                                                </FXCollections>
+                                             </items>
+                                          </JFXComboBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <Button alignment="CENTER" mnemonicParsing="false" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Ajouter" textFill="WHITE">
+                                             <graphic>
+                                                <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Resource/editWhite.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                          <Button alignment="CENTER" mnemonicParsing="false" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #38386E;" text="Supprimer" textFill="WHITE">
+                                             <graphic>
+                                                <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Resource/delWhite.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <effect>
+                                    <DropShadow color="#00000088" />
+                                 </effect>
+                              </VBox>
                                     </children>
                                     <effect>
                                         <DropShadow color="#0000008a" height="18.0" radius="8.5" width="18.0" />
