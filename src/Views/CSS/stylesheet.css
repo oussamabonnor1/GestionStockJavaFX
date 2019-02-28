@@ -3,6 +3,7 @@
     -fx-background-color: #FFF;
     -fx-table-cell-border-color: #38386E;
     -fx-table-header-border-color: #38386E;
+    -fx-table-cell-border-color: transparent;
 }
 
 .table-view .column-header, .table-view .filler {
@@ -14,4 +15,9 @@
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-family: "Segoe UI Bold";
+}
+
+.table-row-cell:empty {
+-fx-background-color: white;
+-fx-border-color: white;
 }

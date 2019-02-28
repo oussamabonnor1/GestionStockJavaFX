@@ -95,7 +95,7 @@
                 <RowConstraints maxHeight="1000.0" minHeight="10.0" prefHeight="583.0" vgrow="ALWAYS" />
             </rowConstraints>
             <children>
-                <VBox prefHeight="309.0" prefWidth="1152.0" style="-fx-background-color: #FFF; -fx-border-color: #38386E;">
+                <VBox prefHeight="309.0" prefWidth="1152.0" style="-fx-background-color: #FFF;">
                     <children>
                         <HBox alignment="CENTER" prefHeight="69.0" prefWidth="1102.0" spacing="10.0">
                             <children>
@@ -143,9 +143,9 @@
                     <GridPane.margin>
                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                     </GridPane.margin>
-                    <effect>
-                        <DropShadow color="#00000088" />
-                    </effect>
+               <effect>
+                  <DropShadow color="#00000080" />
+               </effect>
                 </VBox>
                 <VBox alignment="CENTER" prefHeight="354.0" prefWidth="1115.0" spacing="10.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                     <children>
