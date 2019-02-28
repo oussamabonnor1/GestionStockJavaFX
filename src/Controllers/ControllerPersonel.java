@@ -189,6 +189,16 @@ public class ControllerPersonel implements Initializable {
         }
     }
 
+    public void receiptViewSelected(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewReceipt.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //endregion
 
 }

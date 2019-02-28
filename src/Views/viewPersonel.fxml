@@ -72,7 +72,7 @@
                         <Insets left="-1.0" />
                     </VBox.margin>
                 </HBox>
-                <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" fillHeight="false" onMouseClicked="#receiptViewSelected" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                             <image>
