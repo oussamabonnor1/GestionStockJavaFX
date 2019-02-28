@@ -125,5 +125,3 @@ public class ControllerStock implements Initializable {
     //endregion
 
 }
-
-

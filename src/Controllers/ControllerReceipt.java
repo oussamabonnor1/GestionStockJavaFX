@@ -34,6 +34,7 @@ public class ControllerReceipt {
             Launcher.stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("hello");
         }
     }
 
