@@ -49,14 +49,12 @@ public class ControllerStock implements Initializable {
         colQntA.setCellValueFactory(new PropertyValueFactory<>("qntA"));
         colQntL.setCellValueFactory(new PropertyValueFactory<>("qntL"));
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        //Making the columns editable
-        editablesColumns(colDate, colQntA, colQntL, colStock);
         //binding the observables into the table
         tableStock.setItems(stockObservableList);
     }
 
     public void updateStock(TableColumn.CellEditEvent<Stock, String> cellEditEvent) {
-        Stock tempStock = tableStock.getSelectionModel().getSelectedItem();
+        /*Stock tempStock = tableStock.getSelectionModel().getSelectedItem();
         TablePosition position = tableStock.getSelectionModel().getSelectedCells().get(0);
         String columnName = "";
         boolean isText = false;
@@ -79,6 +77,7 @@ public class ControllerStock implements Initializable {
                 isText ? "'" + cellEditEvent.getNewValue() + "'"
                         : cellEditEvent.getNewValue() //adding a literal or numeric value?
                 , tableStock);
+                */
     }
 
     public void deleteStock(ActionEvent event) {

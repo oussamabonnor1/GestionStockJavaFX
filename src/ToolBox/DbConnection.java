@@ -4,6 +4,7 @@ import Models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 
 import java.sql.*;
@@ -24,6 +25,8 @@ public class DbConnection {
     //NBonA, NArticle, QntA
     public static String detailAppDbName = "detail_app";
     public static ResultSet rs;
+
+    public static ComboBox<String> articles, fournisseurs;
 
     public static void createConnection() {
         rs = null;
@@ -225,7 +228,7 @@ public class DbConnection {
             rs = statement.executeQuery("Select * FROM " + stockDbName + ";");
             while (rs.next()) {
                 stocks.add(new Stock(rs.getInt(1) + "", rs.getDate(2) + "",
-                        rs.getInt(3) + "", rs.getInt(4) + "", rs.getInt(5) + ""));
+                        rs.getInt(4) + "", rs.getInt(3) + "", rs.getInt(5) + ""));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -259,7 +262,7 @@ public class DbConnection {
         }
     }
 
-    public static void updateStock(String nArticle, String columnName, String newValue, TableView<Stock> tableView) {
+    /*public static void updateStock(String nArticle, String columnName, String newValue, TableView<Stock> tableView) {
         try {
             statement.executeUpdate("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " Where NArticle= " + nArticle + ";");
             tableView.setItems(getTableStock());
@@ -267,7 +270,7 @@ public class DbConnection {
             System.out.println("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " Where NArticle= " + nArticle + ";");
             e.printStackTrace();
         }
-    }
+    }*/
 
     //endregion
 
@@ -275,7 +278,6 @@ public class DbConnection {
     public static ObservableList<ReceiptApprovision> getTableApprovisiont() {
         rs = null;
         ObservableList<ReceiptApprovision> approvisionts = FXCollections.observableArrayList();
-
         try {
             rs = statement.executeQuery("Select * FROM " + approvisiontDbName + "," + detailAppDbName +
                     " WHERE " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA;");
@@ -286,22 +288,49 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        updateComboBoxesApprovision();
         return approvisionts;
+    }
+
+    static void updateComboBoxesApprovision() {
+        rs = null;
+        ObservableList<String> articlesList = FXCollections.observableArrayList();
+        ObservableList<String> fournisseurList = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select NArticle from " + articleDbName + ";");
+            while (rs.next()) {
+                articlesList.add(rs.getString(1));
+            }
+            articles.setItems(articlesList);
+            rs = statement.executeQuery("Select NFournisseur from " + fournisseurDbName + ";");
+            while (rs.next()) {
+                fournisseurList.add(rs.getString(1));
+            }
+            articles.setItems(articlesList);
+            fournisseurs.setItems(fournisseurList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void addApprovisiont(String nArticle, String date, String qntA, String nFournisseur, TableView<ReceiptApprovision> tableView) {
         rs = null;
         int row = 0;
         try {
-            //Inserting new Client into database...
+            //Inserting new app into database...
+            //part 1 (approvisionnement)
             statement.executeUpdate("INSERT INTO " + approvisiontDbName + " (`Date`, `NFournisseur`)" +
                     " VALUES ('" + date + "'," + nFournisseur + ");");
+            //part 2 (detail app)
             rs = statement.executeQuery("Select NBonA from " + approvisiontDbName + " where NBonA = (Select MAX(NBonA) from " + approvisiontDbName + ");");
             rs.next();
             row = rs.getInt(1);
             statement.executeUpdate("INSERT INTO " + detailAppDbName + " (`NBonA`,`NArticle`, `QntA`)" +
                     " VALUES (" + row + "," + nArticle + "," + qntA + ");");
+            //populating the table
             tableView.setItems(getTableApprovisiont());
+            //creating/updating the stock
+            addStock(nArticle, date, qntA, "0", qntA, new TableView<>());
             Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
         } catch (SQLException e) {
             System.out.println("INSERT INTO " + approvisiontDbName + " (`Date`, `NFournisseur`)" +

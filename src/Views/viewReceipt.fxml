@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -99,10 +100,10 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="66.0" prefWidth="1052.0" spacing="10.0">
                      <children>
-                        <JFXTextField fx:id="textFieldNumArticle" alignment="CENTER" focusColor="#55a8fd" promptText="Num Article" unFocusColor="#38386e" />
+                        <JFXComboBox fx:id="comboNumArticle" promptText="Num Article" />
+                        <JFXComboBox fx:id="comboNumFournisseur" promptText="Num Fournisseur" />
                         <JFXTextField fx:id="textFieldDate" alignment="CENTER" focusColor="#55a8fd" promptText="Date" unFocusColor="#38386e" />
                         <JFXTextField fx:id="textFieldQntA" alignment="CENTER" focusColor="#55a8fd" promptText="Qnt Approvisionement " unFocusColor="#38386e" />
-                        <JFXTextField fx:id="textFieldNFournisseur" alignment="CENTER" focusColor="#55a8fd" promptText="N Fournisseur" unFocusColor="#38386e" />
                      </children>
                      <VBox.margin>
                         <Insets bottom="10.0" top="10.0" />
@@ -147,10 +148,10 @@
                             <columns>
                                 <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
                                 <TableColumn fx:id="colNBon" editable="false" prefWidth="150.0" text="NBon" />
-                        <TableColumn fx:id="colNArticle" onEditCommit="#updateReceipt" prefWidth="169.0" text="NArticle" />
+                        <TableColumn fx:id="colNArticle" prefWidth="169.0" text="NArticle" />
                                 <TableColumn fx:id="colDate" onEditCommit="#updateReceipt" prefWidth="426.0" text="Date" />
                         <TableColumn fx:id="colNQntA" onEditCommit="#updateReceipt" prefWidth="169.0" text="Qnt Approvisionement" />
-                                <TableColumn fx:id="colNFournisseur" onEditCommit="#updateReceipt" prefWidth="169.0" text="NFournisseur" />
+                                <TableColumn fx:id="colNFournisseur" prefWidth="169.0" text="NFournisseur" />
 
                             </columns>
                             <VBox.margin>

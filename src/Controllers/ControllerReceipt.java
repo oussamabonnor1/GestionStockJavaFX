@@ -2,7 +2,6 @@ package Controllers;
 
 import Launcher.Launcher;
 import Models.Client;
-import Models.Fournisseur;
 import Models.ReceiptApprovision;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
@@ -14,10 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
@@ -32,7 +28,10 @@ public class ControllerReceipt implements Initializable {
 
     //region Variables
     @FXML
-    private JFXTextField textFieldNumArticle, textFieldDate, textFieldQntA, textFieldNFournisseur;
+    private JFXTextField textFieldDate, textFieldQntA;
+
+    @FXML
+    ComboBox<String> comboNumFournisseur, comboNumArticle;
 
     @FXML
     private TableView<ReceiptApprovision> tableReceipt;
@@ -45,6 +44,8 @@ public class ControllerReceipt implements Initializable {
     //region Functions
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        DbConnection.articles = comboNumArticle;
+        DbConnection.fournisseurs = comboNumFournisseur;
         //fetching all articles into observableList
         receiptsObservableList = DbConnection.getTableApprovisiont();
 
@@ -56,20 +57,22 @@ public class ControllerReceipt implements Initializable {
         colNFournisseur.setCellValueFactory(new PropertyValueFactory<>("nFournisseur"));
 
         //Making the columns editable
-        editablesColumns(colNBon, colNArticle, colDate, colNQntA, colNFournisseur);
+        editablesColumns(colDate, colNQntA);
         //binding the observables into the table
         tableReceipt.setItems(receiptsObservableList);
 
         //Making the inputs accept numeric values only (limit: 10)
-        numericLimitedTextField(10, textFieldNumArticle, textFieldQntA, textFieldNFournisseur);
+        numericLimitedTextField(10, textFieldQntA);
     }
 
     @FXML
     void addReceipt(ActionEvent event) {
         //inputChecking makes sure that all the fields are filled...
-        if (inputChecking(textFieldNumArticle, textFieldQntA, textFieldNFournisseur, textFieldDate)) {
-            DbConnection.addApprovisiont(textFieldNumArticle.getText(), textFieldDate.getText(), textFieldQntA.getText(), textFieldNFournisseur.getText(), tableReceipt);
-            inputDeleting(textFieldNumArticle, textFieldQntA, textFieldNFournisseur, textFieldDate); //Clearing out the input UI
+        if (inputChecking(textFieldQntA, textFieldDate) && comboNumArticle.getSelectionModel().getSelectedIndex() >= 0 && comboNumFournisseur.getSelectionModel().getSelectedIndex() >= 0) {
+            DbConnection.addApprovisiont(comboNumArticle.getSelectionModel().getSelectedItem(), textFieldDate.getText(), textFieldQntA.getText(), comboNumFournisseur.getSelectionModel().getSelectedItem(), tableReceipt);
+            inputDeleting(textFieldQntA, textFieldDate); //Clearing out the input UI
+            comboNumArticle.getSelectionModel().select(-1);
+            comboNumFournisseur.getSelectionModel().select(-1);
         } else {
             warningPannel("Erreur!", "Un ou plusieurs champs sont vide!", "Remplissez tout les champs SVP..", Alert.AlertType.ERROR);
         }

@@ -6,6 +6,10 @@
     -fx-table-cell-border-color: transparent;
 }
 
+.table-cell {
+  -fx-alignment: CENTER;
+}
+
 .table-view .column-header, .table-view .filler {
     -fx-background-color: #38386E;
     -fx-size: 40;
