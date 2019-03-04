@@ -1,5 +1,6 @@
 package Controllers;
 
+import Launcher.Launcher;
 import Models.Client;
 import Models.Fournisseur;
 import Models.ReceiptApprovision;
@@ -9,7 +10,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
@@ -17,6 +21,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -78,18 +83,18 @@ public class ControllerReceipt implements Initializable {
         boolean isText = false;
         switch (position.getColumn()) {
             case 1:
-                columnName = "NomClient";
+                columnName = "NArticle";
                 isText = true;
                 break;
             case 2:
-                columnName = "Adresse";
+                columnName = "Date";
                 isText = true;
                 break;
             case 3:
-                columnName = "Telephone";
+                columnName = "QntA";
                 break;
             case 4:
-                columnName = "Fax";
+                columnName = "NFournisseur";
                 break;
         }
         DbConnection.updateApprovisiont(receiptApprovision.getnBon(), columnName,
@@ -100,31 +105,46 @@ public class ControllerReceipt implements Initializable {
 
     @FXML
     void deleteReceipt(ActionEvent event) {
-        /*Client clientToDelete = tableClient.getSelectionModel().getSelectedItem();
-        Fournisseur fournisseurToDelete = tableFournisseur.getSelectionModel().getSelectedItem();
-        if (clientToDelete != null) {
-            DbConnection.deleteClient(clientToDelete.getnClient() + "", tableClient);
-        } else if (fournisseurToDelete != null) {
-            DbConnection.deleteFournisseur(fournisseurToDelete.getnFournisseur() + "", tableFournisseur);
+        ReceiptApprovision receiptApprovision = tableReceipt.getSelectionModel().getSelectedItem();
+        if (receiptApprovision != null) {
+            DbConnection.deleteApprovisiont(receiptApprovision.getnBon() + "", tableReceipt);
         } else {
             warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un Element SVP..", Alert.AlertType.ERROR);
-        }*/
+        }
     }
 
     //region Navigation
     @FXML
     void articleViewSelected(MouseEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewArticle.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    void clientViewSelected(MouseEvent event) {
+    public void stockViewSelected(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewStock.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    void stockViewSelected(MouseEvent event) {
-
+    public void clientViewSelected(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewPersonel.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //endregion
