@@ -40,7 +40,6 @@ public class ControllerStock implements Initializable {
     //region Functions
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        DbConnection.createConnection();
         //fetching all stocks into observableList
         stockObservableList = DbConnection.getTableStock();
 

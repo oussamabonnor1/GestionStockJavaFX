@@ -2,13 +2,16 @@ package Models;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class Approvisiont {
-    SimpleStringProperty nBon, date, nFournisseur;
+public class ReceiptApprovision {
 
-    public Approvisiont(String nBon, String date, String nFournisseur) {
+    SimpleStringProperty nBon, date, nFournisseur, nArticle, qntA;
+
+    public ReceiptApprovision(String nBon, String date, String nFournisseur, String nArticle, String qntA) {
         this.nBon = new SimpleStringProperty(nBon);
         this.date = new SimpleStringProperty(date);
         this.nFournisseur = new SimpleStringProperty(nFournisseur);
+        this.nArticle = new SimpleStringProperty(nArticle);
+        this.qntA = new SimpleStringProperty(qntA);
     }
 
     //region Setters & Getters
@@ -47,5 +50,30 @@ public class Approvisiont {
     public void setnFournisseur(String nFournisseur) {
         this.nFournisseur.set(nFournisseur);
     }
+
+    public String getnArticle() {
+        return nArticle.get();
+    }
+
+    public SimpleStringProperty nArticleProperty() {
+        return nArticle;
+    }
+
+    public void setnArticle(String nArticle) {
+        this.nArticle.set(nArticle);
+    }
+
+    public String getQntA() {
+        return qntA.get();
+    }
+
+    public SimpleStringProperty qntAProperty() {
+        return qntA;
+    }
+
+    public void setQntA(String qntA) {
+        this.qntA.set(qntA);
+    }
+
     //endregion
 }

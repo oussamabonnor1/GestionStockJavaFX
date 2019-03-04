@@ -11,16 +11,18 @@ import java.sql.*;
 public class DbConnection {
     private static Connection connection;
     private static Statement statement;
-    public static String articleDbName = "article";
     //narticle, label, price, minstock
-    public static String clientDbName = "client";
+    public static String articleDbName = "article";
     //nclient, name, adresse, telephone, fax
-    public static String fournisseurDbName = "fournisseur";
+    public static String clientDbName = "client";
     //nFournisseur, name, adresse, telephone, fax
-    public static String stockDbName = "stock";
+    public static String fournisseurDbName = "fournisseur";
     //NArticle , Date , QntA, Qntl, Stock
-    public static String approvisiontDbName = "approvisiont";
+    public static String stockDbName = "stock";
     //NBonA, Date, NFournisseur
+    public static String approvisiontDbName = "approvisiont";
+    //NBonA, NArticle, QntA
+    public static String detailAppDbName = "detail_app";
     public static ResultSet rs;
 
     public static void createConnection() {
@@ -270,14 +272,15 @@ public class DbConnection {
     //endregion
 
     //region Approvisiont
-    public static ObservableList<Approvisiont> getTableApprovisiont() {
+    public static ObservableList<ReceiptApprovision> getTableApprovisiont() {
         rs = null;
-        ObservableList<Approvisiont> approvisionts = FXCollections.observableArrayList();
+        ObservableList<ReceiptApprovision> approvisionts = FXCollections.observableArrayList();
         try {
-            rs = statement.executeQuery("Select * FROM " + approvisiontDbName + ";");
+            rs = statement.executeQuery("Select * FROM " + approvisiontDbName + "," + detailAppDbName +
+                    " WHERE " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA;");
             while (rs.next()) {
-                approvisionts.add(new Approvisiont(rs.getInt(1) + "", rs.getDate(2) + "",
-                        rs.getInt(3) + ""));
+                approvisionts.add(new ReceiptApprovision(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(3) + "", rs.getInt(4) + "", rs.getInt(5) + ""));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -285,22 +288,27 @@ public class DbConnection {
         return approvisionts;
     }
 
-    public static void addApprovisiont(String nBonA, String date, String nFournisseur, TableView<Approvisiont> tableView) {
+    public static void addApprovisiont(String nArticle, String date, String qntA, String nFournisseur, TableView<ReceiptApprovision> tableView) {
         rs = null;
         try {
             //Inserting new Client into database...
-            statement.executeUpdate("INSERT INTO " + approvisiontDbName + " (`NBonA`, `Date`, `NFournisseur`)" +
-                    " VALUES (" + nBonA + ",'" + date + "'," + nFournisseur + ");");
+            statement.executeUpdate("INSERT INTO " + approvisiontDbName + " (`Date`, `NFournisseur`)" +
+                    " VALUES ('" + date + "'," + nFournisseur + ");");
+
+            statement.executeUpdate("INSERT INTO " + detailAppDbName + " (`NBonA`,`NArticle`, `QntA`)" +
+                    " VALUES (1," + nArticle + "," + qntA + ");");
             tableView.setItems(getTableApprovisiont());
             Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
         } catch (SQLException e) {
-            System.out.println("INSERT INTO " + approvisiontDbName + " (`NBonA`, `Date`, `NFournisseur`)" +
-                    " VALUES (" + nBonA + ",'" + date + "'," + nFournisseur + ");");
+            System.out.println("INSERT INTO " + approvisiontDbName + " (`Date`, `NFournisseur`)" +
+                    " VALUES ('" + date + "'," + nFournisseur + ");");
+            System.out.println("INSERT INTO " + detailAppDbName + " (`NBonA`,`NArticle`, `QntA`)" +
+                    " VALUES (1," + nArticle + "," + qntA + ");");
             e.printStackTrace();
         }
     }
 
-    public static void deleteApprovisiont(String nBonA, TableView<Approvisiont> tableView) {
+    public static void deleteApprovisiont(String nBonA, TableView<ReceiptApprovision> tableView) {
         try {
             if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
                 statement.executeUpdate("DELETE FROM " + approvisiontDbName + " WHERE NBonA = " + nBonA);
@@ -311,7 +319,7 @@ public class DbConnection {
         }
     }
 
-    public static void updateApprovisiont(String nBonA, String columnName, String newValue, TableView<Approvisiont> tableView) {
+    public static void updateApprovisiont(String nBonA, String columnName, String newValue, TableView<ReceiptApprovision> tableView) {
         try {
             statement.executeUpdate("UPDATE " + approvisiontDbName + " SET " + columnName + " = " + newValue + " Where NBonA= " + nBonA + ";");
             tableView.setItems(getTableApprovisiont());
