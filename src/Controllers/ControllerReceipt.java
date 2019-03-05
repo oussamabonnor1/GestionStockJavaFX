@@ -85,19 +85,12 @@ public class ControllerReceipt implements Initializable {
         String columnName = "";
         boolean isText = false;
         switch (position.getColumn()) {
-            case 1:
-                columnName = "NArticle";
-                isText = true;
-                break;
             case 2:
                 columnName = "Date";
                 isText = true;
                 break;
             case 3:
                 columnName = "QntA";
-                break;
-            case 4:
-                columnName = "NFournisseur";
                 break;
         }
         DbConnection.updateApprovisiont(receiptApprovision.getnBon(), columnName,

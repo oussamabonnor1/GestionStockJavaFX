@@ -239,11 +239,22 @@ public class DbConnection {
     public static void addStock(String nArticle, String date, String qntA, String qntL, String stock, TableView<Stock> tableView) {
         rs = null;
         try {
-            //Inserting new Client into database...
-            statement.executeUpdate("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
-                    " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
-            tableView.setItems(getTableStock());
-            Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+            if (statement.executeQuery("Select * from " + stockDbName + " where NArticle = " + nArticle + ";").next()) {
+                if (Integer.valueOf(qntA) > 0)
+                    statement.executeUpdate("UPDATE " + stockDbName + " SET Date = '" + date + "', QntA = " + qntA +
+                            ", Stock = Stock +" + qntA
+                            + " Where NArticle= " + nArticle + ";");
+                else
+                    statement.executeUpdate("UPDATE " + stockDbName + " SET Date = '" + date + "', QntA = " + qntA +
+                            ", Stock = Stock -" + qntL
+                            + " Where NArticle= " + nArticle + ";");
+            } else {
+                //Inserting new Client into database...
+                statement.executeUpdate("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
+                        " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
+                tableView.setItems(getTableStock());
+                Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+            }
         } catch (SQLException e) {
             System.out.println("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
                     " VALUES (" + nArticle + ",'" + date + "'," + qntA + "," + qntL + "," + stock + ");");
@@ -262,7 +273,7 @@ public class DbConnection {
         }
     }
 
-    /*public static void updateStock(String nArticle, String columnName, String newValue, TableView<Stock> tableView) {
+    public static void updateStock(String nArticle, String columnName, String newValue, TableView<Stock> tableView) {
         try {
             statement.executeUpdate("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " Where NArticle= " + nArticle + ";");
             tableView.setItems(getTableStock());
@@ -270,7 +281,7 @@ public class DbConnection {
             System.out.println("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " Where NArticle= " + nArticle + ";");
             e.printStackTrace();
         }
-    }*/
+    }
 
     //endregion
 
@@ -358,6 +369,7 @@ public class DbConnection {
                 statement.executeUpdate("UPDATE " + detailAppDbName + " SET " + columnName + " = " + newValue + " Where NBonA= " + nBonA + ";");
             } else {
                 statement.executeUpdate("UPDATE " + approvisiontDbName + " SET " + columnName + " = " + newValue + " Where NBonA= " + nBonA + ";");
+                //statement.executeUpdate("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " where NArticle = " + nArticle + ";");
             }
             tableView.setItems(getTableApprovisiont());
         } catch (SQLException e) {
