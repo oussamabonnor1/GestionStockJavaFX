@@ -1,12 +1,18 @@
 package ToolBox;
 
+import Controllers.ControllerSelling;
+import Launcher.Launcher;
 import Models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 
+import java.io.IOException;
 import java.sql.*;
 
 public class DbConnection {
@@ -100,6 +106,28 @@ public class DbConnection {
             e.printStackTrace();
         }
     }
+
+    public static ObservableList<Article> searchArticles(String bon, String date) {
+        rs = null;
+        ObservableList<Article> articles = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("SELECT * FROM " + articleDbName + ", " + detailAppDbName
+                    + ", " + approvisiontDbName + " " +
+                    " WHERE detail_app.NBonA= " + bon + " AND approvisiont.Date = '" + date + "'" +
+                    " AND approvisiont.NBonA = " + bon + " AND article.NArticle = detail_app.NArticle;");
+            while (rs.next()) {
+                articles.add(new Article(rs.getInt(1) + "", rs.getString(2),
+                        rs.getFloat(3) + "", rs.getInt(4) + ""));
+            }
+        } catch (SQLException e) {
+            System.out.println("SELECT NArticle, Label, Price, MinStock FROM " + articleDbName + ", " + detailAppDbName
+                    + "," + approvisiontDbName + " " +
+                    " WHERE detail_app.NBonA=" + bon + " AND approvisiont.Date = '" + date + "'" +
+                    " AND approvisiont.NBonA = " + bon + " AND article.NArticle = detail_app.NArticle;");
+            e.printStackTrace();
+        }
+        return articles;
+    }
     //endregion
 
     //region Clients
@@ -161,6 +189,20 @@ public class DbConnection {
         }
     }
 
+    public static ObservableList<Client> searchClients(String address) {
+        rs = null;
+        ObservableList<Client> clients = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + clientDbName + " where adresse = '" + address + "';");
+            while (rs.next()) {
+                clients.add(new Client(rs.getInt(1) + "", rs.getString(2),
+                        rs.getString(3), rs.getInt(4) + "", rs.getInt(5) + ""));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clients;
+    }
     //endregion
 
     //region Fournisseur
@@ -248,10 +290,30 @@ public class DbConnection {
                     statement.executeUpdate("UPDATE " + stockDbName + " SET Date = '" + date + "', QntA = " + qntA +
                             ", Stock = Stock +" + qntA
                             + " Where NArticle= " + nArticle + ";");
-                else
-                    statement.executeUpdate("UPDATE " + stockDbName + " SET Date = '" + date + "', QntA = " + qntA +
+                else {
+                    statement.executeUpdate("UPDATE " + stockDbName + " SET Date = '" + date + "', QntL = " + qntL +
                             ", Stock = Stock -" + qntL
                             + " Where NArticle= " + nArticle + ";");
+                    rs = statement.executeQuery("Select Stock from " + stockDbName + " where NArticle = " + nArticle + ";");
+                    if (rs.next()) {
+                        int stockLeft = rs.getInt(1);
+                        rs = statement.executeQuery("Select MinStock from " + articleDbName + " where NArticle = " + nArticle + ";");
+                        rs.next();
+                        int minStock = rs.getInt(1);
+                        if (stockLeft <= minStock) {
+                            if (Utilities.confirmationPanel("Attention!", "Votre stock du article:" + nArticle + " est presque épuisé!",
+                                    "Voulez vous le recharger maintenant?")) {
+                                try {
+                                    Parent root = FXMLLoader.load(ControllerSelling.class.getResource("/Views/viewReceipt.fxml"));
+                                    Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+                                    Launcher.stage.setScene(scene);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 //Inserting new Client into database...
                 statement.executeUpdate("INSERT INTO " + stockDbName + " (`NArticle`, `Date`, `QntA`, `Qntl`, `Stock`)" +
@@ -390,7 +452,7 @@ public class DbConnection {
         ObservableList<ReceiptLivraison> livraisons = FXCollections.observableArrayList();
         try {
             rs = statement.executeQuery("Select * FROM " + livraisonDbName + "," + detailLivDbName +
-                    " WHERE " + livraisonDbName + ".NBonL = " + detailAppDbName + ".NBonL;");
+                    " WHERE " + livraisonDbName + ".NBonL = " + detailLivDbName + ".NBonL;");
             while (rs.next()) {
                 livraisons.add(new ReceiptLivraison(rs.getInt(1) + "", rs.getDate(2) + "",
                         rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + ""));

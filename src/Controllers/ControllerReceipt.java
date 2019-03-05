@@ -79,7 +79,7 @@ public class ControllerReceipt implements Initializable {
     }
 
     @FXML
-    void updateReceipt(TableColumn.CellEditEvent<Client, String> update) {
+    void updateReceipt(TableColumn.CellEditEvent<ReceiptApprovision, String> update) {
         ReceiptApprovision receiptApprovision = tableReceipt.getSelectionModel().getSelectedItem();
         TablePosition position = tableReceipt.getSelectionModel().getSelectedCells().get(0);
         String columnName = "";

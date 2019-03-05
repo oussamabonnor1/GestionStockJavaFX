@@ -4,6 +4,8 @@ import Launcher.Launcher;
 import Models.Article;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,7 +34,7 @@ public class ControllerArticle implements Initializable {
     private TableColumn<Article, String> colnArticle, colLabel, colPrice, colMinStock;
 
     @FXML
-    private JFXTextField textFieldNArticle, textFieldLabel, textFieldPrice, textFieldMinStock;
+    private JFXTextField textFieldNArticle, textFieldLabel, textFieldPrice, textFieldMinStock, textFieldSearchBon, textFieldSearchDate;
 
     private ObservableList<Article> articleObservableList = FXCollections.observableArrayList();
     //endregion
@@ -53,6 +55,15 @@ public class ControllerArticle implements Initializable {
         tableArticle.setItems(articleObservableList);
         //Making the inputs accept numeric values only (limit: 10)
         numericLimitedTextField(10, textFieldNArticle, textFieldPrice, textFieldMinStock);
+
+        textFieldSearchDate.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.matches("")) tableArticle.setItems(DbConnection.getTableArticle());
+                else if (!textFieldSearchBon.getText().matches(""))
+                    tableArticle.setItems(DbConnection.searchArticles(textFieldSearchBon.getText(), newValue));
+            }
+        });
     }
 
     //region Methods

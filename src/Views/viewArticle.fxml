@@ -40,6 +40,12 @@
                             <children>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1115.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                     <children>
+                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="1102.0" spacing="20.0">
+                                 <children>
+                                    <JFXTextField fx:id="textFieldSearchBon" alignment="CENTER" minWidth="50.0" promptText="Rechercher par Bon" />
+                                    <JFXTextField fx:id="textFieldSearchDate" alignment="CENTER" minWidth="50.0" promptText="Rechercher par date" />
+                                 </children>
+                              </HBox>
                                         <TableView fx:id="tableArticle" editable="true" prefHeight="260.0" prefWidth="1035.0" stylesheets="@CSS/stylesheet.css" VBox.vgrow="ALWAYS">
                                             <columns>
                                                 <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
@@ -55,7 +61,7 @@
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                             </columnResizePolicy>
                                             <VBox.margin>
-                                                <Insets left="30.0" right="30.0" top="30.0" />
+                                                <Insets left="30.0" right="30.0" top="10.0" />
                                             </VBox.margin>
                                         </TableView>
                               <VBox alignment="CENTER" prefHeight="105.0" prefWidth="1052.0" style="-fx-background-color: #FFF;">

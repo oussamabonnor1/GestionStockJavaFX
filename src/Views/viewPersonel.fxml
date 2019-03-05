@@ -166,6 +166,11 @@
                 </VBox>
                 <VBox alignment="CENTER" prefHeight="354.0" prefWidth="1115.0" spacing="10.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                     <children>
+                  <JFXTextField fx:id="textFieldSearch" alignment="CENTER" minWidth="50.0" promptText="Rechercher par ville">
+                     <VBox.margin>
+                        <Insets left="400.0" right="400.0" />
+                     </VBox.margin>
+                  </JFXTextField>
                         <TableView fx:id="tableClient" editable="true" prefHeight="260.0" prefWidth="1035.0" stylesheets="@CSS/stylesheet.css">
                             <columns>
                                 <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->

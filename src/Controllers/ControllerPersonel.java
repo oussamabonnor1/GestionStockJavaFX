@@ -6,6 +6,8 @@ import Models.Fournisseur;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,7 +33,7 @@ public class ControllerPersonel implements Initializable {
 
     //region Variables
     @FXML
-    private JFXTextField textFieldNumero, textFieldName, textFieldAdresse, textFieldTelephone, textFieldFax;
+    private JFXTextField textFieldNumero, textFieldName, textFieldAdresse, textFieldTelephone, textFieldFax, textFieldSearch;
 
     @FXML
     private JFXComboBox<?> comboBoxType;
@@ -80,6 +82,14 @@ public class ControllerPersonel implements Initializable {
 
         //Making the inputs accept numeric values only (limit: 10)
         numericLimitedTextField(10, textFieldNumero, textFieldTelephone, textFieldFax);
+
+        textFieldSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.matches("")) tableClient.setItems(DbConnection.getTableClients());
+                else tableClient.setItems(DbConnection.searchClients(newValue));
+            }
+        });
     }
 
     //region Functions
