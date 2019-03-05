@@ -22,9 +22,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static ToolBox.Utilities.*;
-import static ToolBox.Utilities.warningPannel;
 
-public class ControllerReceipt implements Initializable {
+public class ControllerSelling implements Initializable {
 
     //region Variables
     @FXML
@@ -146,9 +145,9 @@ public class ControllerReceipt implements Initializable {
     }
 
     @FXML
-    public void deliveryViewSelected(MouseEvent mouseEvent) {
+    public void shoppingViewSelected(MouseEvent mouseEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewSelling.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewReceipt.fxml"));
             Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
             Launcher.stage.setScene(scene);
         } catch (IOException e) {

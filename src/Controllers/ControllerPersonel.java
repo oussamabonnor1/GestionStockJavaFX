@@ -166,6 +166,7 @@ public class ControllerPersonel implements Initializable {
                 , tableFournisseur);
     }
 
+    //region Navigation
     @FXML
     void articleViewSelected(MouseEvent event) {
         try {
@@ -198,6 +199,18 @@ public class ControllerPersonel implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void deliveryViewSelected(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewSelling.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //endregion
 
     //endregion
 

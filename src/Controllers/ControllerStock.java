@@ -89,6 +89,7 @@ public class ControllerStock implements Initializable {
         }
     }
 
+    //region Navigation
     @FXML
     void articleViewSelected(MouseEvent event) {
         try {
@@ -111,6 +112,7 @@ public class ControllerStock implements Initializable {
         }
     }
 
+    @FXML
     public void receiptViewSelected(MouseEvent mouseEvent) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/Views/viewReceipt.fxml"));
@@ -120,6 +122,17 @@ public class ControllerStock implements Initializable {
             e.printStackTrace();
         }
     }
-    //endregion
 
+    @FXML
+    public void deliveryViewSelected(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewSelling.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //endregion
+    //endregion
 }

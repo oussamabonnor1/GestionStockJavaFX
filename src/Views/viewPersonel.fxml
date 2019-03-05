@@ -87,6 +87,20 @@
                   </Label>
                </children>
             </VBox>
+            <VBox alignment="CENTER" onMouseClicked="#deliveryViewSelected" prefHeight="120.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Resource/removeShoppingCart.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Delivery" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Segoe UI Bold" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
          </children>
       </VBox>
         <GridPane alignment="CENTER" style="-fx-background-color: #F8F9FA;" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">

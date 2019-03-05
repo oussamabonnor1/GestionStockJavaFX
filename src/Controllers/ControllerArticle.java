@@ -132,6 +132,17 @@ public class ControllerArticle implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void deliveryViewSelected(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/Views/viewSelling.fxml"));
+            Scene scene = new Scene(root, Launcher.stage.getScene().getWidth(), Launcher.stage.getScene().getHeight());
+            Launcher.stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     //endregion
 
 }
