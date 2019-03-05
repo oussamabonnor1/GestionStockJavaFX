@@ -366,6 +366,22 @@ public class DbConnection {
         }
         return stock;
     }
+
+    public static ObservableList<Stock> stockSearchDate(String start, String end) {
+        rs = null;
+        ObservableList<Stock> stock = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("SELECT * FROM " + stockDbName + " where Date BETWEEN '" + start + "' and '" + end + "';");
+            while (rs.next()) {
+                stock.add(new Stock(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(4) + "", rs.getInt(3) + "", rs.getInt(5) + ""));
+            }
+        } catch (SQLException e) {
+            System.out.println("SELECT * FROM " + stockDbName + "where Date BETWEEN '" + start + "' and '" + end + "';");
+            e.printStackTrace();
+        }
+        return stock;
+    }
     //endregion
 
     //region Approvisiont

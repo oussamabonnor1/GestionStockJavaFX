@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -111,6 +112,15 @@
                       <children>
                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1052.0" spacing="10.0" HBox.hgrow="ALWAYS">
                               <children>
+                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="1102.0" spacing="20.0">
+                           <children>
+                              <JFXTextField fx:id="textFieldStartDate" alignment="CENTER" minWidth="50.0" promptText="Date début" />
+                              <JFXTextField fx:id="textFieldEndDate" alignment="CENTER" minWidth="50.0" promptText="Date fin" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </HBox>
                                   <TableView fx:id="tableStock" editable="true" prefHeight="260.0" prefWidth="1035.0" stylesheets="@CSS/stylesheet.css" VBox.vgrow="ALWAYS">
                                       <columns>
                                           <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
@@ -127,7 +137,7 @@
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                       </columnResizePolicy>
                                       <VBox.margin>
-                                          <Insets left="30.0" right="30.0" top="50.0" />
+                                          <Insets left="30.0" right="30.0" top="10.0" />
                                       </VBox.margin>
                                   </TableView>
                         <HBox alignment="CENTER" prefHeight="78.0" prefWidth="1072.0" spacing="20.0" style="-fx-background-color: #ffffff;">

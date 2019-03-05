@@ -3,12 +3,12 @@ package Controllers;
 import Launcher.Launcher;
 import Models.Stock;
 import ToolBox.DbConnection;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static ToolBox.Utilities.editablesColumns;
 import static ToolBox.Utilities.warningPannel;
 
 public class ControllerStock implements Initializable {
@@ -41,6 +39,9 @@ public class ControllerStock implements Initializable {
 
     @FXML
     private JFXToggleButton toggle;
+
+    @FXML
+    private JFXTextField textFieldStartDate, textFieldEndDate;
 
     private ObservableList<Stock> stockObservableList = FXCollections.observableArrayList();
     //endregion
@@ -60,6 +61,17 @@ public class ControllerStock implements Initializable {
         //binding the observables into the table
         tableStock.setItems(stockObservableList);
 
+        textFieldEndDate.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(newValue.matches("")) tableStock.setItems(DbConnection.getTableStock());
+                else{
+                    if(!textFieldStartDate.getText().matches("")){
+                        tableStock.setItems(DbConnection.stockSearchDate(textFieldStartDate.getText(), textFieldEndDate.getText()));
+                    }
+                }
+            }
+        });
     }
 
     @FXML
