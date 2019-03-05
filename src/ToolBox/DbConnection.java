@@ -24,9 +24,13 @@ public class DbConnection {
     public static String approvisiontDbName = "approvisiont";
     //NBonA, NArticle, QntA
     public static String detailAppDbName = "detail_app";
+    //NBonL, Date, NClient
+    public static String livraisonDbName = "livraison";
+    //NBonL, NArticle, QntL
+    public static String detailLivDbName = "detail_liv";
     public static ResultSet rs;
 
-    public static ComboBox<String> articles, fournisseurs;
+    public static ComboBox<String> articlesApp, fournisseurs, articlesLiv, clients;
 
     public static void createConnection() {
         rs = null;
@@ -312,12 +316,11 @@ public class DbConnection {
             while (rs.next()) {
                 articlesList.add(rs.getString(1));
             }
-            articles.setItems(articlesList);
             rs = statement.executeQuery("Select NFournisseur from " + fournisseurDbName + ";");
             while (rs.next()) {
                 fournisseurList.add(rs.getString(1));
             }
-            articles.setItems(articlesList);
+            articlesApp.setItems(articlesList);
             fournisseurs.setItems(fournisseurList);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -375,6 +378,102 @@ public class DbConnection {
         } catch (SQLException e) {
             System.out.println("UPDATE " + approvisiontDbName + " SET " + columnName + " = " + newValue + " Where NBonA= " + nBonA + ";");
             System.out.println("UPDATE " + detailAppDbName + " SET " + columnName + " = " + newValue + " Where NBonA= " + nBonA + ";");
+            e.printStackTrace();
+        }
+    }
+
+    //endregion
+
+    //region Livraison
+    public static ObservableList<ReceiptLivraison> getTableLivraison() {
+        rs = null;
+        ObservableList<ReceiptLivraison> livraisons = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + livraisonDbName + "," + detailLivDbName +
+                    " WHERE " + livraisonDbName + ".NBonL = " + detailAppDbName + ".NBonL;");
+            while (rs.next()) {
+                livraisons.add(new ReceiptLivraison(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + ""));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateComboBoxesLivraison();
+        return livraisons;
+    }
+
+    static void updateComboBoxesLivraison() {
+        rs = null;
+        ObservableList<String> articlesList = FXCollections.observableArrayList();
+        ObservableList<String> clientList = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select NArticle from " + articleDbName + ";");
+            while (rs.next()) {
+                articlesList.add(rs.getString(1));
+            }
+            rs = statement.executeQuery("Select NClient from " + clientDbName + ";");
+            while (rs.next()) {
+                clientList.add(rs.getString(1));
+            }
+            articlesLiv.setItems(articlesList);
+            clients.setItems(clientList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addLivraison(String nArticle, String date, String qntL, String nClient, TableView<ReceiptLivraison> tableView) {
+        rs = null;
+        int row = 0;
+        try {
+            //Inserting new liv into database...
+            //part 1 (Livraison)
+            statement.executeUpdate("INSERT INTO " + livraisonDbName + " (`Date`, `NClient`)" +
+                    " VALUES ('" + date + "'," + nClient + ");");
+            //part 2 (detail liv)
+            rs = statement.executeQuery("Select NBonL from " + livraisonDbName + " where NBonL = (Select MAX(NBonL) from " + livraisonDbName + ");");
+            rs.next();
+            row = rs.getInt(1);
+            statement.executeUpdate("INSERT INTO " + detailLivDbName + " (`NBonL`,`NArticle`, `QntL`)" +
+                    " VALUES (" + row + "," + nArticle + "," + qntL + ");");
+            //populating the table
+            tableView.setItems(getTableLivraison());
+            //creating/updating the stock
+            //TODO: check this damn thing
+            addStock(nArticle, date, "0", qntL, "0", new TableView<>());
+            Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+        } catch (SQLException e) {
+            System.out.println("INSERT INTO " + livraisonDbName + " (`Date`, `NClient`)" +
+                    " VALUES ('" + date + "'," + nClient + ");");
+            System.out.println("INSERT INTO " + detailLivDbName + " (`NBonL`,`NArticle`, `QntL`)" +
+                    " VALUES (" + row + "," + nArticle + "," + qntL + ");");
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteLivraison(String nBonL, TableView<ReceiptLivraison> tableView) {
+        try {
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM " + livraisonDbName + " WHERE NBonL = " + nBonL);
+                tableView.setItems(getTableLivraison());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateLivraison(String nBonL, String columnName, String newValue, TableView<ReceiptLivraison> tableView) {
+        try {
+            if (columnName.matches("NArticle") || columnName.matches("QntL")) {
+                statement.executeUpdate("UPDATE " + detailLivDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
+            } else {
+                statement.executeUpdate("UPDATE " + livraisonDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
+                //statement.executeUpdate("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " where NArticle = " + nArticle + ";");
+            }
+            tableView.setItems(getTableLivraison());
+        } catch (SQLException e) {
+            System.out.println("UPDATE " + detailLivDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
+            System.out.println("UPDATE " + livraisonDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
             e.printStackTrace();
         }
     }

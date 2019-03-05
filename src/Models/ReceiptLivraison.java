@@ -4,14 +4,14 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class ReceiptLivraison {
 
-    SimpleStringProperty nBon, date, nFournisseur, nArticle, qntA;
+    SimpleStringProperty nBon, date, nClient, nArticle, qntL;
 
-    public ReceiptLivraison(String nBon, String date, String nFournisseur, String nArticle, String qntA) {
+    public ReceiptLivraison(String nBon, String date, String nClient, String nArticle, String qntL) {
         this.nBon = new SimpleStringProperty(nBon);
         this.date = new SimpleStringProperty(date);
-        this.nFournisseur = new SimpleStringProperty(nFournisseur);
+        this.nClient = new SimpleStringProperty(nClient);
         this.nArticle = new SimpleStringProperty(nArticle);
-        this.qntA = new SimpleStringProperty(qntA);
+        this.qntL = new SimpleStringProperty(qntL);
     }
 
     //region Setters & Getters
@@ -39,16 +39,16 @@ public class ReceiptLivraison {
         this.date.set(date);
     }
 
-    public String getnFournisseur() {
-        return nFournisseur.get();
+    public String getnClient() {
+        return nClient.get();
     }
 
-    public SimpleStringProperty nFournisseurProperty() {
-        return nFournisseur;
+    public SimpleStringProperty nClientProperty() {
+        return nClient;
     }
 
-    public void setnFournisseur(String nFournisseur) {
-        this.nFournisseur.set(nFournisseur);
+    public void setnClient(String nClient) {
+        this.nClient.set(nClient);
     }
 
     public String getnArticle() {
@@ -63,16 +63,16 @@ public class ReceiptLivraison {
         this.nArticle.set(nArticle);
     }
 
-    public String getQntA() {
-        return qntA.get();
+    public String getQntL() {
+        return qntL.get();
     }
 
-    public SimpleStringProperty qntAProperty() {
-        return qntA;
+    public SimpleStringProperty qntLProperty() {
+        return qntL;
     }
 
-    public void setQntA(String qntA) {
-        this.qntA.set(qntA);
+    public void setQntL(String qntL) {
+        this.qntL.set(qntL);
     }
 
     //endregion

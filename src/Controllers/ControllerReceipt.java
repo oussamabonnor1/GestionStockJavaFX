@@ -44,9 +44,9 @@ public class ControllerReceipt implements Initializable {
     //region Functions
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        DbConnection.articles = comboNumArticle;
+        DbConnection.articlesApp = comboNumArticle;
         DbConnection.fournisseurs = comboNumFournisseur;
-        //fetching all articles into observableList
+        //fetching all articlesApp into observableList
         receiptsObservableList = DbConnection.getTableApprovisiont();
 
         //Binding the columns with the model's variables

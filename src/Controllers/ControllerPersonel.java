@@ -55,7 +55,7 @@ public class ControllerPersonel implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //fetching all articles into observableList
+        //fetching all articlesApp into observableList
         clientObservableList = DbConnection.getTableClients();
         fournisseurObservableList = DbConnection.getTableFournisseur();
 

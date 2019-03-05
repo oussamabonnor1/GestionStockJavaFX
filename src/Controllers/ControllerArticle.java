@@ -40,7 +40,7 @@ public class ControllerArticle implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DbConnection.createConnection();
-        //fetching all articles into observableList
+        //fetching all articlesApp into observableList
         articleObservableList = DbConnection.getTableArticle();
         //Binding the columns with the model's variables
         colnArticle.setCellValueFactory(new PropertyValueFactory<>("nArticle"));
