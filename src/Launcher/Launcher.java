@@ -12,7 +12,7 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("../Views/viewArticle.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../Views/viewLauncher.fxml"));
         stage = primaryStage;
         stage.setTitle("Stock management");
         stage.setScene(new Scene(root, 1360, 680));
