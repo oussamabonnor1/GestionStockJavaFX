@@ -4,11 +4,13 @@ import Launcher.Launcher;
 import Models.Article;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -64,6 +66,7 @@ public class ControllerArticle implements Initializable {
                     tableArticle.setItems(DbConnection.searchArticles(textFieldSearchBon.getText(), newValue));
             }
         });
+
     }
 
     //region Methods

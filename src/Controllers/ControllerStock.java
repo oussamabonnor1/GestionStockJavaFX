@@ -3,8 +3,12 @@ package Controllers;
 import Launcher.Launcher;
 import Models.Stock;
 import ToolBox.DbConnection;
+import com.jfoenix.controls.JFXToggleButton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,6 +38,10 @@ public class ControllerStock implements Initializable {
 
     @FXML
     private TableColumn<Stock, String> colnArticle, colDate, colQntA, colQntL, colStock;
+
+    @FXML
+    private JFXToggleButton toggle;
+
     private ObservableList<Stock> stockObservableList = FXCollections.observableArrayList();
     //endregion
 
@@ -51,6 +59,16 @@ public class ControllerStock implements Initializable {
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         //binding the observables into the table
         tableStock.setItems(stockObservableList);
+
+    }
+
+    @FXML
+    public void toggle(ActionEvent event) {
+        if (toggle.isSelected()) {
+            tableStock.setItems(DbConnection.shortStock());
+        } else {
+            tableStock.setItems(DbConnection.getTableStock());
+        }
     }
 
     public void updateStock(TableColumn.CellEditEvent<Stock, String> cellEditEvent) {

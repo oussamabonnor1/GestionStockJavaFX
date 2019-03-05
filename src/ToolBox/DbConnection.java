@@ -128,6 +128,8 @@ public class DbConnection {
         }
         return articles;
     }
+
+
     //endregion
 
     //region Clients
@@ -349,6 +351,21 @@ public class DbConnection {
         }
     }
 
+    public static ObservableList<Stock> shortStock() {
+        rs = null;
+        ObservableList<Stock> stock = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("SELECT * FROM " + stockDbName + "," + articleDbName + "" +
+                    " WHERE stock.NArticle = article.NArticle AND stock.Stock <= article.MinStock");
+            while (rs.next()) {
+                stock.add(new Stock(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(4) + "", rs.getInt(3) + "", rs.getInt(5) + ""));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stock;
+    }
     //endregion
 
     //region Approvisiont
