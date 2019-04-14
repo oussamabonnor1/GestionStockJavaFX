@@ -129,6 +129,32 @@ public class DbConnection {
         return articles;
     }
 
+    public static Article getArticle(String nArticle) {
+        rs = null;
+        try {
+            rs = statement.executeQuery("SELECT * FROM " + articleDbName + " WHERE narticle = " + nArticle + ";");
+            rs.next();
+            return new Article(rs.getInt(1) + "", rs.getString(2) + "",
+                    rs.getFloat(3) + "", rs.getInt(4) + "");
+        } catch (SQLException e) {
+            System.out.println("SELECT * FROM " + articleDbName + " WHERE narticle = " + nArticle + ";");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static int getIdOfArticle(String label) {
+        rs = null;
+        try {
+            rs = statement.executeQuery("SELECT * FROM " + articleDbName + " WHERE Label = '" + label + "';");
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            System.out.println("SELECT * FROM " + articleDbName + " WHERE Label = '" + label + "';");
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
     //endregion
 
@@ -393,7 +419,30 @@ public class DbConnection {
                     " WHERE " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA;");
             while (rs.next()) {
                 approvisionts.add(new ReceiptApprovision(rs.getInt(1) + "", rs.getDate(2) + "",
-                        rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + ""));
+                        rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + "", "", ""));
+                Article temp = getArticle(approvisionts.get(approvisionts.size() - 1).getnArticle());
+                approvisionts.get(approvisionts.size() - 1).setLabel(temp.getLabel());
+                approvisionts.get(approvisionts.size() - 1).setPrix(temp.getPrice());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateComboBoxesApprovision();
+        return approvisionts;
+    }
+
+    public static ObservableList<ReceiptApprovision> getArticlesList(String nBon) {
+        rs = null;
+        ObservableList<ReceiptApprovision> approvisionts = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + approvisiontDbName + "," + detailAppDbName +
+                    " WHERE " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA AND " + detailAppDbName + ".NBonA = " + nBon + ";");
+            while (rs.next()) {
+                approvisionts.add(new ReceiptApprovision(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + "", "", ""));
+                Article temp = getArticle(approvisionts.get(approvisionts.size() - 1).getnArticle());
+                approvisionts.get(approvisionts.size() - 1).setLabel(temp.getLabel());
+                approvisionts.get(approvisionts.size() - 1).setPrix(temp.getPrice());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -407,11 +456,11 @@ public class DbConnection {
         ObservableList<String> articlesList = FXCollections.observableArrayList();
         ObservableList<String> fournisseurList = FXCollections.observableArrayList();
         try {
-            rs = statement.executeQuery("Select NArticle from " + articleDbName + ";");
+            rs = statement.executeQuery("Select Label from " + articleDbName + ";");
             while (rs.next()) {
                 articlesList.add(rs.getString(1));
             }
-            rs = statement.executeQuery("Select NFournisseur from " + fournisseurDbName + ";");
+            rs = statement.executeQuery("Select NomFournisseur from " + fournisseurDbName + ";");
             while (rs.next()) {
                 fournisseurList.add(rs.getString(1));
             }
@@ -422,30 +471,35 @@ public class DbConnection {
         }
     }
 
-    public static void addApprovisiont(String nArticle, String date, String qntA, String nFournisseur, TableView<ReceiptApprovision> tableView) {
+    public static void addApprovisiont(String date, String nFournisseur, TableView<ReceiptApprovision> tableView) {
         rs = null;
-        int row = 0;
         try {
             //Inserting new app into database...
             //part 1 (approvisionnement)
             statement.executeUpdate("INSERT INTO " + approvisiontDbName + " (`Date`, `NFournisseur`)" +
                     " VALUES ('" + date + "'," + nFournisseur + ");");
-            //part 2 (detail app)
-            rs = statement.executeQuery("Select NBonA from " + approvisiontDbName + " where NBonA = (Select MAX(NBonA) from " + approvisiontDbName + ");");
-            rs.next();
-            row = rs.getInt(1);
-            statement.executeUpdate("INSERT INTO " + detailAppDbName + " (`NBonA`,`NArticle`, `QntA`)" +
-                    " VALUES (" + row + "," + nArticle + "," + qntA + ");");
             //populating the table
             tableView.setItems(getTableApprovisiont());
-            //creating/updating the stock
-            addStock(nArticle, date, qntA, "0", qntA, new TableView<>());
             Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
         } catch (SQLException e) {
             System.out.println("INSERT INTO " + approvisiontDbName + " (`Date`, `NFournisseur`)" +
                     " VALUES ('" + date + "'," + nFournisseur + ");");
+            e.printStackTrace();
+        }
+    }
+
+    public static void addApprovisiontProduit(String nBon, String nArticle, String qntA, String date, TableView<ReceiptApprovision> tableView) {
+        try {
+            //part 2 (detail app)
+            statement.executeUpdate("INSERT INTO " + detailAppDbName + " (`NBonA`,`NArticle`, `QntA`)" +
+                    " VALUES (" + nBon + "," + nArticle + "," + qntA + ");");
+            //populating the table
+            tableView.setItems(getArticlesList(nBon));
+            //creating/updating the stock
+            addStock(nArticle, date, qntA, "0", qntA, new TableView<>());
+        } catch (SQLException e) {
             System.out.println("INSERT INTO " + detailAppDbName + " (`NBonA`,`NArticle`, `QntA`)" +
-                    " VALUES (" + row + "," + nArticle + "," + qntA + ");");
+                    " VALUES (" + nBon + "," + nArticle + "," + qntA + ");");
             e.printStackTrace();
         }
     }
@@ -502,11 +556,11 @@ public class DbConnection {
         ObservableList<String> articlesList = FXCollections.observableArrayList();
         ObservableList<String> clientList = FXCollections.observableArrayList();
         try {
-            rs = statement.executeQuery("Select NArticle from " + articleDbName + ";");
+            rs = statement.executeQuery("Select Label from " + articleDbName + ";");
             while (rs.next()) {
                 articlesList.add(rs.getString(1));
             }
-            rs = statement.executeQuery("Select NClient from " + clientDbName + ";");
+            rs = statement.executeQuery("Select NomClient from " + clientDbName + ";");
             while (rs.next()) {
                 clientList.add(rs.getString(1));
             }
@@ -537,6 +591,7 @@ public class DbConnection {
             //TODO: check this damn thing
             addStock(nArticle, date, "0", qntL, "0", new TableView<>());
             Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
+
         } catch (SQLException e) {
             System.out.println("INSERT INTO " + livraisonDbName + " (`Date`, `NClient`)" +
                     " VALUES ('" + date + "'," + nClient + ");");

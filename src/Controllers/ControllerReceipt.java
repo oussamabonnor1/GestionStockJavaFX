@@ -1,8 +1,10 @@
 package Controllers;
 
 import Launcher.Launcher;
+import Models.Article;
 import Models.Client;
 import Models.ReceiptApprovision;
+import Models.ReceiptLivraison;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
@@ -37,8 +39,16 @@ public class ControllerReceipt implements Initializable {
     private TableView<ReceiptApprovision> tableReceipt;
 
     @FXML
-    private TableColumn<ReceiptApprovision, String> colNBon, colNArticle, colDate, colNQntA, colNFournisseur;
+    private TableColumn<ReceiptApprovision, String> colNBon, colDate, colNFournisseur;
+
+    @FXML
+    private TableView<ReceiptApprovision> tableProduit;
+
+    @FXML
+    private TableColumn<ReceiptApprovision, String> colNArticle, colNQntA, colPrix, colLabel;
+
     private ObservableList<ReceiptApprovision> receiptsObservableList = FXCollections.observableArrayList();
+    private ObservableList<ReceiptApprovision> produitObservableList = FXCollections.observableArrayList();
     //endregion
 
     //region Functions
@@ -48,18 +58,27 @@ public class ControllerReceipt implements Initializable {
         DbConnection.fournisseurs = comboNumFournisseur;
         //fetching all articlesApp into observableList
         receiptsObservableList = DbConnection.getTableApprovisiont();
+        produitObservableList = DbConnection.getArticlesList(receiptsObservableList.get(0).getnBon());
 
         //Binding the columns with the model's variables
         colNBon.setCellValueFactory(new PropertyValueFactory<>("nBon"));
         colNArticle.setCellValueFactory(new PropertyValueFactory<>("nArticle"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colNQntA.setCellValueFactory(new PropertyValueFactory<>("qntA"));
+        colPrix.setCellValueFactory(new PropertyValueFactory<>("prix"));
+        colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));
         colNFournisseur.setCellValueFactory(new PropertyValueFactory<>("nFournisseur"));
 
         //Making the columns editable
         editablesColumns(colDate, colNQntA);
-        //binding the observables into the table
+        //binding the observables into the forms table
         tableReceipt.setItems(receiptsObservableList);
+        //binding the observables into the products table
+        tableProduit.setItems(produitObservableList);
+
+        tableReceipt.selectionModelProperty().addListener(event -> {
+            produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon());
+        });
 
         //Making the inputs accept numeric values only (limit: 10)
         numericLimitedTextField(10, textFieldQntA);
@@ -68,10 +87,9 @@ public class ControllerReceipt implements Initializable {
     @FXML
     void addReceipt(ActionEvent event) {
         //inputChecking makes sure that all the fields are filled...
-        if (inputChecking(textFieldQntA, textFieldDate) && comboNumArticle.getSelectionModel().getSelectedIndex() >= 0 && comboNumFournisseur.getSelectionModel().getSelectedIndex() >= 0) {
-            DbConnection.addApprovisiont(comboNumArticle.getSelectionModel().getSelectedItem(), textFieldDate.getText(), textFieldQntA.getText(), comboNumFournisseur.getSelectionModel().getSelectedItem(), tableReceipt);
-            inputDeleting(textFieldQntA, textFieldDate); //Clearing out the input UI
-            comboNumArticle.getSelectionModel().select(-1);
+        if (inputChecking(textFieldDate) && comboNumFournisseur.getSelectionModel().getSelectedIndex() >= 0) {
+            DbConnection.addApprovisiont(textFieldDate.getText(), comboNumFournisseur.getSelectionModel().getSelectedItem(), tableReceipt);
+            inputDeleting(textFieldDate); //Clearing out the input UI
             comboNumFournisseur.getSelectionModel().select(-1);
         } else {
             warningPannel("Erreur!", "Un ou plusieurs champs sont vide!", "Remplissez tout les champs SVP..", Alert.AlertType.ERROR);
@@ -108,6 +126,31 @@ public class ControllerReceipt implements Initializable {
             warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un Element SVP..", Alert.AlertType.ERROR);
         }
     }
+
+    @FXML
+    void addProduct(ActionEvent event) {
+        if (inputChecking(textFieldQntA) && comboNumArticle.getSelectionModel().getSelectedIndex() >= 0 && tableReceipt.getSelectionModel().getSelectedIndex() >= 0) {
+
+            ReceiptApprovision bon = tableReceipt.getSelectionModel().getSelectedItem();
+            int produitId = DbConnection.getIdOfArticle(comboNumArticle.getSelectionModel().getSelectedItem());
+            DbConnection.addApprovisiontProduit(bon.getnBon(), produitId + "", textFieldQntA.getText(),
+                    tableReceipt.getSelectionModel().getSelectedItem().getDate(), tableProduit);
+
+            inputDeleting(textFieldQntA, textFieldDate); //Clearing out the input UI
+            comboNumArticle.getSelectionModel().select(-1);
+            comboNumFournisseur.getSelectionModel().select(-1);
+        } else if (tableReceipt.getSelectionModel().getSelectedIndex() < 0) {
+            warningPannel("Erreur!", "Aucun bon n'est selectionné!", "Selectionnez un bon SVP..", Alert.AlertType.ERROR);
+        } else {
+            warningPannel("Erreur!", "Un ou plusieurs champs sont vide!", "Remplissez tout les champs SVP..", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    void deleteProduct(ActionEvent event) {
+
+    }
+
 
     //region Navigation
     @FXML
