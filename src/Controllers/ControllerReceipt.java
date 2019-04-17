@@ -58,7 +58,8 @@ public class ControllerReceipt implements Initializable {
         DbConnection.fournisseurs = comboNumFournisseur;
         //fetching all articlesApp into observableList
         receiptsObservableList = DbConnection.getTableApprovisiont();
-        produitObservableList = DbConnection.getArticlesList(receiptsObservableList.get(0).getnBon());
+        if (receiptsObservableList.size() > 0)
+            produitObservableList = DbConnection.getArticlesList(receiptsObservableList.get(0).getnBon());
 
         //Binding the columns with the model's variables
         colNBon.setCellValueFactory(new PropertyValueFactory<>("nBon"));
@@ -88,7 +89,7 @@ public class ControllerReceipt implements Initializable {
     void addReceipt(ActionEvent event) {
         //inputChecking makes sure that all the fields are filled...
         if (inputChecking(textFieldDate) && comboNumFournisseur.getSelectionModel().getSelectedIndex() >= 0) {
-            DbConnection.addApprovisiont(textFieldDate.getText(), comboNumFournisseur.getSelectionModel().getSelectedItem(), tableReceipt);
+            DbConnection.addApprovisiont(textFieldDate.getText(), DbConnection.getIdFournisseur(comboNumFournisseur.getSelectionModel().getSelectedItem()), tableReceipt);
             inputDeleting(textFieldDate); //Clearing out the input UI
             comboNumFournisseur.getSelectionModel().select(-1);
         } else {

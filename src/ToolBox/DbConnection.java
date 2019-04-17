@@ -292,6 +292,18 @@ public class DbConnection {
         }
     }
 
+    public static String getIdFournisseur(String Name) {
+        rs = null;
+        try {
+            rs = statement.executeQuery("Select * FROM " + fournisseurDbName + " WHERE NomFournisseur = '" + Name + "';");
+            rs.next();
+            return rs.getString(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     //endregion
 
     //region Stock
@@ -415,8 +427,7 @@ public class DbConnection {
         rs = null;
         ObservableList<ReceiptApprovision> approvisionts = FXCollections.observableArrayList();
         try {
-            rs = statement.executeQuery("Select * FROM " + approvisiontDbName + "," + detailAppDbName +
-                    " WHERE " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA;");
+            rs = statement.executeQuery("Select * FROM " + approvisiontDbName + ";");
             while (rs.next()) {
                 approvisionts.add(new ReceiptApprovision(rs.getInt(1) + "", rs.getDate(2) + "",
                         rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + "", "", ""));
