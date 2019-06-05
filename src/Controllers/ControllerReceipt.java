@@ -7,7 +7,10 @@ import Models.ReceiptApprovision;
 import Models.ReceiptLivraison;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -77,8 +80,10 @@ public class ControllerReceipt implements Initializable {
         //binding the observables into the products table
         tableProduit.setItems(produitObservableList);
 
-        tableReceipt.selectionModelProperty().addListener(event ->
-                produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon()));
+        tableReceipt.getSelectionModel().getSelectedCells().addListener((ListChangeListener<TablePosition>) c -> {
+            produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon());
+            tableProduit.setItems(produitObservableList);
+        });
 
         //Making the inputs accept numeric values only (limit: 10)
         numericLimitedTextField(10, textFieldQntA);
