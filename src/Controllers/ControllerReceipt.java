@@ -77,9 +77,8 @@ public class ControllerReceipt implements Initializable {
         //binding the observables into the products table
         tableProduit.setItems(produitObservableList);
 
-        tableReceipt.selectionModelProperty().addListener(event -> {
-            produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon());
-        });
+        tableReceipt.selectionModelProperty().addListener(event ->
+                produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon()));
 
         //Making the inputs accept numeric values only (limit: 10)
         numericLimitedTextField(10, textFieldQntA);

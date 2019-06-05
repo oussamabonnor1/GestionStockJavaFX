@@ -430,10 +430,7 @@ public class DbConnection {
             rs = statement.executeQuery("Select * FROM " + approvisiontDbName + ";");
             while (rs.next()) {
                 approvisionts.add(new ReceiptApprovision(rs.getInt(1) + "", rs.getDate(2) + "",
-                        rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + "", "", ""));
-                Article temp = getArticle(approvisionts.get(approvisionts.size() - 1).getnArticle());
-                approvisionts.get(approvisionts.size() - 1).setLabel(temp.getLabel());
-                approvisionts.get(approvisionts.size() - 1).setPrix(temp.getPrice());
+                        rs.getInt(3) + "",  "",  "", "", ""));
             }
         } catch (SQLException e) {
             e.printStackTrace();
