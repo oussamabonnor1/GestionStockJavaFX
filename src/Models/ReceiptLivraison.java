@@ -4,17 +4,20 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class ReceiptLivraison {
 
-    SimpleStringProperty nBon, date, nClient, nArticle, qntL;
+    SimpleStringProperty nBon, date, nClient, nArticle, qntL, label, prix;
 
-    public ReceiptLivraison(String nBon, String date, String nClient, String nArticle, String qntL) {
+    public ReceiptLivraison(String nBon, String date, String nFournisseur, String nArticle, String qntA, String label, String prix) {
         this.nBon = new SimpleStringProperty(nBon);
         this.date = new SimpleStringProperty(date);
-        this.nClient = new SimpleStringProperty(nClient);
+        this.nClient = new SimpleStringProperty(nFournisseur);
         this.nArticle = new SimpleStringProperty(nArticle);
-        this.qntL = new SimpleStringProperty(qntL);
+        this.qntL = new SimpleStringProperty(qntA);
+        this.label = new SimpleStringProperty(label);
+        this.prix = new SimpleStringProperty(prix);
     }
 
     //region Setters & Getters
+
     public String getnBon() {
         return nBon.get();
     }
@@ -73,6 +76,30 @@ public class ReceiptLivraison {
 
     public void setQntL(String qntL) {
         this.qntL.set(qntL);
+    }
+
+    public String getLabel() {
+        return label.get();
+    }
+
+    public SimpleStringProperty labelProperty() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label.set(label);
+    }
+
+    public String getPrix() {
+        return prix.get();
+    }
+
+    public SimpleStringProperty prixProperty() {
+        return prix;
+    }
+
+    public void setPrix(String prix) {
+        this.prix.set(prix);
     }
 
     //endregion

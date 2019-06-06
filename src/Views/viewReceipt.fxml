@@ -215,7 +215,7 @@
             </HBox>
               </children>
               <GridPane.margin>
-                  <Insets bottom="20.0" left="30.0" right="30.0" />
+                  <Insets left="30.0" right="30.0" />
               </GridPane.margin>
               <effect>
                   <DropShadow blurType="GAUSSIAN" color="#00000081" height="25.0" radius="12.0" width="25.0" />
