@@ -130,12 +130,12 @@ public class DbConnection {
     }
 
     public static Article getArticle(String nArticle) {
-        rs = null;
         try {
-            rs = statement.executeQuery("SELECT * FROM " + articleDbName + " WHERE narticle = " + nArticle + ";");
-            rs.next();
-            return new Article(rs.getInt(1) + "", rs.getString(2) + "",
+            ResultSet rs = statement.executeQuery("SELECT * FROM " + articleDbName + " WHERE narticle = " + nArticle + ";");
+            rs.first();
+            Article article =  new Article(rs.getInt(1) + "", rs.getString(2) + "",
                     rs.getFloat(3) + "", rs.getInt(4) + "");
+            return article;
         } catch (SQLException e) {
             System.out.println("SELECT * FROM " + articleDbName + " WHERE narticle = " + nArticle + ";");
             e.printStackTrace();
@@ -430,7 +430,7 @@ public class DbConnection {
             rs = statement.executeQuery("Select * FROM " + approvisiontDbName + ";");
             while (rs.next()) {
                 approvisionts.add(new ReceiptApprovision(rs.getInt(1) + "", rs.getDate(2) + "",
-                        rs.getInt(3) + "",  "",  "", "", ""));
+                        rs.getInt(3) + "", "", "", "", ""));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -444,15 +444,20 @@ public class DbConnection {
         ObservableList<ReceiptApprovision> approvisionts = FXCollections.observableArrayList();
         try {
             rs = statement.executeQuery("Select * FROM " + approvisiontDbName + "," + detailAppDbName +
-                    " WHERE " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA AND " + detailAppDbName + ".NBonA = " + nBon + ";");
+                    " WHERE " + detailAppDbName + ".NBonA = " + nBon + " AND " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA ;");
+
             while (rs.next()) {
                 approvisionts.add(new ReceiptApprovision(rs.getInt(1) + "", rs.getDate(2) + "",
                         rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + "", "", ""));
-                Article temp = getArticle(approvisionts.get(approvisionts.size() - 1).getnArticle());
-                approvisionts.get(approvisionts.size() - 1).setLabel(temp.getLabel());
-                approvisionts.get(approvisionts.size() - 1).setPrix(temp.getPrice());
+            }
+            for (int i = 0; i < approvisionts.size(); i++) {
+                Article temp = getArticle(approvisionts.get(i).getnArticle());
+                approvisionts.get(i).setLabel(temp.getLabel());
+                approvisionts.get(i).setPrix(temp.getPrice());
             }
         } catch (SQLException e) {
+            System.out.println("Select * FROM " + approvisiontDbName + "," + detailAppDbName +
+                    " WHERE " + detailAppDbName + ".NBonA = " + nBon + " AND " + approvisiontDbName + ".NBonA = " + detailAppDbName + ".NBonA ;");
             e.printStackTrace();
         }
         updateComboBoxesApprovision();
