@@ -81,8 +81,10 @@ public class ControllerReceipt implements Initializable {
         tableProduit.setItems(produitObservableList);
 
         tableReceipt.getSelectionModel().getSelectedCells().addListener((ListChangeListener<TablePosition>) c -> {
-            produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon());
-            tableProduit.setItems(produitObservableList);
+            if (tableReceipt.getSelectionModel().getSelectedItem() != null) {
+                produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon());
+                tableProduit.setItems(produitObservableList);
+            }
         });
 
         //Making the inputs accept numeric values only (limit: 10)
@@ -153,7 +155,12 @@ public class ControllerReceipt implements Initializable {
 
     @FXML
     void deleteProduct(ActionEvent event) {
-
+        ReceiptApprovision receiptApprovision = tableProduit.getSelectionModel().getSelectedItem();
+        if (receiptApprovision != null) {
+            DbConnection.deleteApprovisiontProduit(receiptApprovision.getnBon() + "", receiptApprovision.getnArticle() + "", tableProduit);
+        } else {
+            warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un Element SVP..", Alert.AlertType.ERROR);
+        }
     }
 
 

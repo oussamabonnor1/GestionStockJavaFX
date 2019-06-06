@@ -527,6 +527,16 @@ public class DbConnection {
             e.printStackTrace();
         }
     }
+    public static void deleteApprovisiontProduit(String nBonA, String nArticle, TableView<ReceiptApprovision> tableView) {
+        try {
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM " + detailAppDbName + " WHERE NBonA = " + nBonA + " AND NArticle = "+ nArticle);
+                tableView.setItems(getArticlesList(nBonA));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void updateApprovisiont(String nBonA, String columnName, String newValue, TableView<ReceiptApprovision> tableView) {
         try {
