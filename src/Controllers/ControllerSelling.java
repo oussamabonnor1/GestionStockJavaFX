@@ -2,7 +2,7 @@ package Controllers;
 
 import Launcher.Launcher;
 import Models.Client;
-import Models.ReceiptApprovision;
+import Models.ReceiptLivraison;
 import Models.ReceiptLivraison;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
@@ -36,42 +36,42 @@ public class ControllerSelling implements Initializable {
     ComboBox<String> comboNumClient, comboNumArticle;
 
     @FXML
-    private TableView<ReceiptApprovision> tableReceipt;
+    private TableView<ReceiptLivraison> tableReceipt;
 
     @FXML
-    private TableColumn<ReceiptApprovision, String> colNBon, colDate, colNClient;
+    private TableColumn<ReceiptLivraison, String> colNBon, colDate, colNClient;
 
     @FXML
-    private TableView<ReceiptApprovision> tableProduit;
+    private TableView<ReceiptLivraison> tableProduit;
 
     @FXML
-    private TableColumn<ReceiptApprovision, String> colNArticle, colNQntL, colPrix, colLabel;
+    private TableColumn<ReceiptLivraison, String> colNArticle, colNQntL, colPrix, colLabel;
 
-    private ObservableList<ReceiptApprovision> receiptsObservableList = FXCollections.observableArrayList();
-    private ObservableList<ReceiptApprovision> produitObservableList = FXCollections.observableArrayList();
+    private ObservableList<ReceiptLivraison> receiptsObservableList = FXCollections.observableArrayList();
+    private ObservableList<ReceiptLivraison> produitObservableList = FXCollections.observableArrayList();
     //endregion
 
     //region Functions
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DbConnection.articlesApp = comboNumArticle;
-        DbConnection.fournisseurs = comboNumFournisseur;
+        DbConnection.clients = comboNumClient;
         //fetching all articlesApp into observableList
-        receiptsObservableList = DbConnection.getTableApprovisiont();
+        receiptsObservableList = DbConnection.getTableLivraison();
         if (receiptsObservableList.size() > 0)
-            produitObservableList = DbConnection.getArticlesList(receiptsObservableList.get(0).getnBon());
+            produitObservableList = DbConnection.getArticlesListL(receiptsObservableList.get(0).getnBon());
 
         //Binding the columns with the model's variables
         colNBon.setCellValueFactory(new PropertyValueFactory<>("nBon"));
         colNArticle.setCellValueFactory(new PropertyValueFactory<>("nArticle"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-        colNQntA.setCellValueFactory(new PropertyValueFactory<>("qntA"));
+        colNQntL.setCellValueFactory(new PropertyValueFactory<>("qntL"));
         colPrix.setCellValueFactory(new PropertyValueFactory<>("prix"));
         colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));
-        colNFournisseur.setCellValueFactory(new PropertyValueFactory<>("nFournisseur"));
+        colNClient.setCellValueFactory(new PropertyValueFactory<>("nClient"));
 
         //Making the columns editable
-        editablesColumns(colDate, colNQntA);
+        editablesColumns(colDate, colNQntL);
         //binding the observables into the forms table
         tableReceipt.setItems(receiptsObservableList);
         //binding the observables into the products table
@@ -79,30 +79,30 @@ public class ControllerSelling implements Initializable {
 
         tableReceipt.getSelectionModel().getSelectedCells().addListener((ListChangeListener<TablePosition>) c -> {
             if (tableReceipt.getSelectionModel().getSelectedItem() != null) {
-                produitObservableList = DbConnection.getArticlesList(tableReceipt.getSelectionModel().getSelectedItem().getnBon());
+                produitObservableList = DbConnection.getArticlesListL(tableReceipt.getSelectionModel().getSelectedItem().getnBon());
                 tableProduit.setItems(produitObservableList);
             }
         });
 
         //Making the inputs accept numeric values only (limit: 10)
-        numericLimitedTextField(10, textFieldQntA);
+        numericLimitedTextField(10, textFieldQntL);
     }
 
     @FXML
     void addReceipt(ActionEvent event) {
         //inputChecking makes sure that all the fields are filled...
-        if (inputChecking(textFieldDate) && comboNumFournisseur.getSelectionModel().getSelectedIndex() >= 0) {
-            DbConnection.addApprovisiont(textFieldDate.getText(), DbConnection.getIdFournisseur(comboNumFournisseur.getSelectionModel().getSelectedItem()), tableReceipt);
+        if (inputChecking(textFieldDate) && comboNumClient.getSelectionModel().getSelectedIndex() >= 0) {
+            DbConnection.addLivraison(textFieldDate.getText(), DbConnection.getIdFournisseur(comboNumClient.getSelectionModel().getSelectedItem()), tableReceipt);
             inputDeleting(textFieldDate); //Clearing out the input UI
-            comboNumFournisseur.getSelectionModel().select(-1);
+            comboNumClient.getSelectionModel().select(-1);
         } else {
             warningPannel("Erreur!", "Un ou plusieurs champs sont vide!", "Remplissez tout les champs SVP..", Alert.AlertType.ERROR);
         }
     }
 
     @FXML
-    void updateReceipt(TableColumn.CellEditEvent<ReceiptApprovision, String> update) {
-        ReceiptApprovision receiptApprovision = tableReceipt.getSelectionModel().getSelectedItem();
+    void updateReceipt(TableColumn.CellEditEvent<ReceiptLivraison, String> update) {
+        ReceiptLivraison ReceiptLivraison = tableReceipt.getSelectionModel().getSelectedItem();
         TablePosition position = tableReceipt.getSelectionModel().getSelectedCells().get(0);
         String columnName = "";
         boolean isText = false;
@@ -115,7 +115,7 @@ public class ControllerSelling implements Initializable {
                 columnName = "QntA";
                 break;
         }
-        DbConnection.updateApprovisiont(receiptApprovision.getnBon(), columnName,
+        DbConnection.updateLivraison(ReceiptLivraison.getnBon(), columnName,
                 isText ? "'" + update.getNewValue() + "'"
                         : update.getNewValue() //adding a literal or numeric value?
                 , tableReceipt);
@@ -123,9 +123,9 @@ public class ControllerSelling implements Initializable {
 
     @FXML
     void deleteReceipt(ActionEvent event) {
-        ReceiptApprovision receiptApprovision = tableReceipt.getSelectionModel().getSelectedItem();
-        if (receiptApprovision != null) {
-            DbConnection.deleteApprovisiont(receiptApprovision.getnBon() + "", tableReceipt);
+        ReceiptLivraison ReceiptLivraison = tableReceipt.getSelectionModel().getSelectedItem();
+        if (ReceiptLivraison != null) {
+            DbConnection.deleteLivraison(ReceiptLivraison.getnBon() + "", tableReceipt);
         } else {
             warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un Element SVP..", Alert.AlertType.ERROR);
         }
@@ -133,16 +133,16 @@ public class ControllerSelling implements Initializable {
 
     @FXML
     void addProduct(ActionEvent event) {
-        if (inputChecking(textFieldQntA) && comboNumArticle.getSelectionModel().getSelectedIndex() >= 0 && tableReceipt.getSelectionModel().getSelectedIndex() >= 0) {
+        if (inputChecking(textFieldQntL) && comboNumArticle.getSelectionModel().getSelectedIndex() >= 0 && tableReceipt.getSelectionModel().getSelectedIndex() >= 0) {
 
-            ReceiptApprovision bon = tableReceipt.getSelectionModel().getSelectedItem();
+            ReceiptLivraison bon = tableReceipt.getSelectionModel().getSelectedItem();
             int produitId = DbConnection.getIdOfArticle(comboNumArticle.getSelectionModel().getSelectedItem());
-            DbConnection.addApprovisiontProduit(bon.getnBon(), produitId + "", textFieldQntA.getText(),
+            DbConnection.addLivraisonProduit(bon.getnBon(), produitId + "", textFieldQntL.getText(),
                     tableReceipt.getSelectionModel().getSelectedItem().getDate(), tableProduit);
 
-            inputDeleting(textFieldQntA, textFieldDate); //Clearing out the input UI
+            inputDeleting(textFieldQntL, textFieldDate); //Clearing out the input UI
             comboNumArticle.getSelectionModel().select(-1);
-            comboNumFournisseur.getSelectionModel().select(-1);
+            comboNumClient.getSelectionModel().select(-1);
         } else if (tableReceipt.getSelectionModel().getSelectedIndex() < 0) {
             warningPannel("Erreur!", "Aucun bon n'est selectionné!", "Selectionnez un bon SVP..", Alert.AlertType.ERROR);
         } else {
@@ -152,9 +152,9 @@ public class ControllerSelling implements Initializable {
 
     @FXML
     void deleteProduct(ActionEvent event) {
-        ReceiptApprovision receiptApprovision = tableProduit.getSelectionModel().getSelectedItem();
-        if (receiptApprovision != null) {
-            DbConnection.deleteApprovisiontProduit(receiptApprovision.getnBon() + "", receiptApprovision.getnArticle() + "", tableProduit);
+        ReceiptLivraison ReceiptLivraison = tableProduit.getSelectionModel().getSelectedItem();
+        if (ReceiptLivraison != null) {
+            DbConnection.deleteLivraisonProduit(ReceiptLivraison.getnBon() + "", ReceiptLivraison.getnArticle() + "", tableProduit);
         } else {
             warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un Element SVP..", Alert.AlertType.ERROR);
         }

@@ -133,7 +133,7 @@ public class DbConnection {
         try {
             ResultSet rs = statement.executeQuery("SELECT * FROM " + articleDbName + " WHERE narticle = " + nArticle + ";");
             rs.first();
-            Article article =  new Article(rs.getInt(1) + "", rs.getString(2) + "",
+            Article article = new Article(rs.getInt(1) + "", rs.getString(2) + "",
                     rs.getFloat(3) + "", rs.getInt(4) + "");
             return article;
         } catch (SQLException e) {
@@ -527,10 +527,11 @@ public class DbConnection {
             e.printStackTrace();
         }
     }
+
     public static void deleteApprovisiontProduit(String nBonA, String nArticle, TableView<ReceiptApprovision> tableView) {
         try {
             if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
-                statement.executeUpdate("DELETE FROM " + detailAppDbName + " WHERE NBonA = " + nBonA + " AND NArticle = "+ nArticle);
+                statement.executeUpdate("DELETE FROM " + detailAppDbName + " WHERE NBonA = " + nBonA + " AND NArticle = " + nArticle);
                 tableView.setItems(getArticlesList(nBonA));
             }
         } catch (SQLException e) {
@@ -561,13 +562,37 @@ public class DbConnection {
         rs = null;
         ObservableList<ReceiptLivraison> livraisons = FXCollections.observableArrayList();
         try {
-            rs = statement.executeQuery("Select * FROM " + livraisonDbName + "," + detailLivDbName +
-                    " WHERE " + livraisonDbName + ".NBonL = " + detailLivDbName + ".NBonL;");
+            rs = statement.executeQuery("Select * FROM " + livraisonDbName + ";");
             while (rs.next()) {
                 livraisons.add(new ReceiptLivraison(rs.getInt(1) + "", rs.getDate(2) + "",
-                        rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + ""));
+                        rs.getInt(3) + "", "", "", "", ""));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateComboBoxesLivraison();
+        return livraisons;
+    }
+
+    public static ObservableList<ReceiptLivraison> getArticlesListL(String nBon) {
+        rs = null;
+        ObservableList<ReceiptLivraison> livraisons = FXCollections.observableArrayList();
+        try {
+            rs = statement.executeQuery("Select * FROM " + livraisonDbName + "," + detailLivDbName +
+                    " WHERE " + detailLivDbName + ".NBonL = " + nBon + " AND " + livraisonDbName + ".NBonL = " + detailLivDbName + ".NBonL ;");
+
+            while (rs.next()) {
+                livraisons.add(new ReceiptLivraison(rs.getInt(1) + "", rs.getDate(2) + "",
+                        rs.getInt(3) + "", rs.getInt(5) + "", rs.getInt(6) + "", "", ""));
+            }
+            for (int i = 0; i < livraisons.size(); i++) {
+                Article temp = getArticle(livraisons.get(i).getnArticle());
+                livraisons.get(i).setLabel(temp.getLabel());
+                livraisons.get(i).setPrix(temp.getPrice());
+            }
+        } catch (SQLException e) {
+            System.out.println("Select * FROM " + livraisonDbName + "," + detailLivDbName +
+                    " WHERE " + detailLivDbName + ".NBonA = " + nBon + " AND " + livraisonDbName + ".NBonA = " + detailLivDbName + ".NBonA ;");
             e.printStackTrace();
         }
         updateComboBoxesLivraison();
@@ -587,39 +612,42 @@ public class DbConnection {
             while (rs.next()) {
                 clientList.add(rs.getString(1));
             }
-            articlesLiv.setItems(articlesList);
+            articlesApp.setItems(articlesList);
             clients.setItems(clientList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void addLivraison(String nArticle, String date, String qntL, String nClient, TableView<ReceiptLivraison> tableView) {
+    public static void addLivraison(String date, String nClient, TableView<ReceiptLivraison> tableView) {
         rs = null;
-        int row = 0;
         try {
-            //Inserting new liv into database...
-            //part 1 (Livraison)
+            //Inserting new app into database...
+            //part 1 (livraison)
             statement.executeUpdate("INSERT INTO " + livraisonDbName + " (`Date`, `NClient`)" +
                     " VALUES ('" + date + "'," + nClient + ");");
-            //part 2 (detail liv)
-            rs = statement.executeQuery("Select NBonL from " + livraisonDbName + " where NBonL = (Select MAX(NBonL) from " + livraisonDbName + ");");
-            rs.next();
-            row = rs.getInt(1);
-            statement.executeUpdate("INSERT INTO " + detailLivDbName + " (`NBonL`,`NArticle`, `QntL`)" +
-                    " VALUES (" + row + "," + nArticle + "," + qntL + ");");
             //populating the table
             tableView.setItems(getTableLivraison());
-            //creating/updating the stock
-            //TODO: check this damn thing
-            addStock(nArticle, date, "0", qntL, "0", new TableView<>());
             Utilities.warningPannel("Félicitation", "Element bien ajoutée!", "", Alert.AlertType.INFORMATION);
-
         } catch (SQLException e) {
             System.out.println("INSERT INTO " + livraisonDbName + " (`Date`, `NClient`)" +
                     " VALUES ('" + date + "'," + nClient + ");");
+            e.printStackTrace();
+        }
+    }
+
+    public static void addLivraisonProduit(String nBon, String nArticle, String qntL, String date, TableView<ReceiptLivraison> tableView) {
+        try {
+            //part 2 (detail app)
+            statement.executeUpdate("INSERT INTO " + detailLivDbName + " (`NBonL`,`NArticle`, `QntL`)" +
+                    " VALUES (" + nBon + "," + nArticle + "," + qntL + ");");
+            //populating the table
+            tableView.setItems(getArticlesListL(nBon));
+            //creating/updating the stock
+            addStock(nArticle, date, "0", qntL, "0", new TableView<>());
+        } catch (SQLException e) {
             System.out.println("INSERT INTO " + detailLivDbName + " (`NBonL`,`NArticle`, `QntL`)" +
-                    " VALUES (" + row + "," + nArticle + "," + qntL + ");");
+                    " VALUES (" + nBon + "," + nArticle + "," + qntL + ");");
             e.printStackTrace();
         }
     }
@@ -635,18 +663,28 @@ public class DbConnection {
         }
     }
 
+    public static void deleteLivraisonProduit(String nBonL, String nArticle, TableView<ReceiptLivraison> tableView) {
+        try {
+            if (Utilities.confirmationPanel("Attention", "Cet élément sera supprimé", "etes vous sure ?")) {
+                statement.executeUpdate("DELETE FROM " + detailLivDbName + " WHERE NBonL = " + nBonL + " AND NArticle = " + nArticle);
+                tableView.setItems(getArticlesListL(nBonL));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void updateLivraison(String nBonL, String columnName, String newValue, TableView<ReceiptLivraison> tableView) {
         try {
             if (columnName.matches("NArticle") || columnName.matches("QntL")) {
                 statement.executeUpdate("UPDATE " + detailLivDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
             } else {
                 statement.executeUpdate("UPDATE " + livraisonDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
-                //statement.executeUpdate("UPDATE " + stockDbName + " SET " + columnName + " = " + newValue + " where NArticle = " + nArticle + ";");
             }
             tableView.setItems(getTableLivraison());
         } catch (SQLException e) {
-            System.out.println("UPDATE " + detailLivDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
             System.out.println("UPDATE " + livraisonDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
+            System.out.println("UPDATE " + detailLivDbName + " SET " + columnName + " = " + newValue + " Where NBonL= " + nBonL + ";");
             e.printStackTrace();
         }
     }
