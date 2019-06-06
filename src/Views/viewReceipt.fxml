@@ -24,10 +24,9 @@
     </columnConstraints>
     <rowConstraints>
         <RowConstraints />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #38386E; -fx-border-color: #38386E;" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="128.0" style="-fx-background-color: #38386E; -fx-border-color: #38386E;" GridPane.vgrow="ALWAYS">
             <children>
             <VBox alignment="CENTER" onMouseClicked="#articleViewSelected" prefHeight="120.0" prefWidth="200.0" spacing="5.0">
                <children>
@@ -101,136 +100,126 @@
             </VBox>
             </children>
         </VBox>
-        <GridPane alignment="CENTER" style="-fx-background-color: #F8F9FA;" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
-            <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints maxHeight="1000.0" minHeight="10.0" prefHeight="587.0" vgrow="ALWAYS" />
-            </rowConstraints>
-            <children>
-                <VBox alignment="CENTER" prefWidth="1115.0" spacing="20.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-                    <children>
-                  <HBox prefWidth="1092.0" spacing="10.0">
-                     <children>
-                              <TableView fx:id="tableReceipt" editable="true" prefHeight="300.0" prefWidth="1100.0" stylesheets="@CSS/stylesheet.css">
-                                  <columns>
-                                      <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
-                                      <TableColumn fx:id="colNBon" editable="false" prefWidth="150.0" text="NBon" />
-                                      <TableColumn fx:id="colDate" onEditCommit="#updateReceipt" prefWidth="426.0" text="Date" />
-                                      <TableColumn fx:id="colNFournisseur" prefWidth="169.0" text="NFournisseur" />
-      
+          <VBox alignment="CENTER" prefWidth="1115.0" spacing="20.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+              <children>
+            <HBox prefWidth="1092.0" spacing="10.0">
+               <children>
+                        <TableView fx:id="tableReceipt" editable="true" prefHeight="300.0" prefWidth="1100.0" stylesheets="@CSS/stylesheet.css">
+                            <columns>
+                                <!--<TableColumn fx:id="colDesignation" prefWidth="75.0" text="Designation" />-->
+                                <TableColumn fx:id="colNBon" editable="false" prefWidth="150.0" text="NBon" />
+                                <TableColumn fx:id="colDate" onEditCommit="#updateReceipt" prefWidth="426.0" text="Date" />
+                                <TableColumn fx:id="colNFournisseur" prefWidth="169.0" text="NFournisseur" />
+
                                   </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                              </TableView>
-                        <VBox alignment="CENTER" fillWidth="false" prefHeight="248.0" prefWidth="609.0" spacing="15.0" style="-fx-background-color: fff;">
-                           <effect>
-                              <DropShadow color="#00000050" height="10.0" radius="4.5" width="10.0" />
-                           </effect>
-                           <children>
-                              <Label text="Bon X">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                              <JFXComboBox fx:id="comboNumFournisseur" prefHeight="30.0" prefWidth="190.0" promptText="Num Fournisseur" />
-                              <JFXTextField fx:id="textFieldDate" alignment="CENTER" focusColor="#55a8fd" prefColumnCount="2" prefHeight="30.0" prefWidth="190.0" promptText="YYYY-MM-DD" unFocusColor="#38386e">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#addReceipt" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Nouveau bon" textFill="WHITE">
-                                 <graphic>
-                                    <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../Resource/editWhite.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteReceipt" prefHeight="36.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Supprimer Bon" textFill="WHITE">
-                                 <graphic>
-                                    <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../Resource/delWhite.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <VBox.margin>
-                                    <Insets top="-5.0" />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefWidth="1092.0" spacing="10.0">
-                     <children>
-                        <TableView fx:id="tableProduit" editable="true" prefHeight="300.0" prefWidth="1100.0" stylesheets="@CSS/stylesheet.css">
-                           <columns>
-                              <TableColumn fx:id="colNArticle" prefWidth="169.0" text="NArticle" />
-                              <TableColumn fx:id="colLabel" prefWidth="169.0" text="Label" />
-                              <TableColumn fx:id="colPrix" prefWidth="169.0" text="Prix" />
-                              <TableColumn fx:id="colNQntA" onEditCommit="#updateReceipt" prefWidth="169.0" text="Qnt Approvisionement" />
-                           </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                         </TableView>
-                        <VBox alignment="CENTER" fillWidth="false" prefHeight="248.0" prefWidth="609.0" spacing="15.0" style="-fx-background-color: fff;">
-                           <effect>
-                              <DropShadow color="#00000050" height="10.0" radius="4.5" width="10.0" />
-                           </effect>
-                           <children>
-                              <Label text="Produit X">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                              <JFXComboBox fx:id="comboNumArticle" prefHeight="31.0" prefWidth="183.0" promptText="Num Article" />
-                              <JFXTextField fx:id="textFieldQntA" alignment="CENTER" focusColor="#55a8fd" prefHeight="31.0" prefWidth="188.0" promptText="Qnt Approvisionement " unFocusColor="#38386e" />
-                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#addProduct" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Nouveau produit" textFill="WHITE">
-                                 <graphic>
-                                    <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../Resource/editWhite.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="36.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Supprimer Produit" textFill="WHITE">
-                                 <graphic>
-                                    <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../Resource/delWhite.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <VBox.margin>
-                                    <Insets top="-5.0" />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                        </VBox>
+                  <VBox alignment="CENTER" fillWidth="false" prefHeight="248.0" prefWidth="609.0" spacing="15.0" style="-fx-background-color: fff;">
+                     <effect>
+                        <DropShadow color="#00000050" height="10.0" radius="4.5" width="10.0" />
+                     </effect>
+                     <children>
+                        <Label text="Bon X">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <JFXComboBox fx:id="comboNumFournisseur" prefHeight="30.0" prefWidth="190.0" promptText="Num Fournisseur" />
+                        <JFXTextField fx:id="textFieldDate" alignment="CENTER" focusColor="#55a8fd" prefColumnCount="2" prefHeight="30.0" prefWidth="190.0" promptText="YYYY-MM-DD" unFocusColor="#38386e">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </JFXTextField>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#addReceipt" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Nouveau bon" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resource/editWhite.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteReceipt" prefHeight="36.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Supprimer Bon" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resource/delWhite.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets top="-5.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
-                  </HBox>
-                    </children>
-                    <GridPane.margin>
-                        <Insets bottom="20.0" left="30.0" right="30.0" />
-                    </GridPane.margin>
-                    <effect>
-                        <DropShadow blurType="GAUSSIAN" color="#00000081" height="25.0" radius="12.0" width="25.0" />
-                    </effect>
-                </VBox>
-            </children>
-        </GridPane>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="1092.0" spacing="10.0">
+               <children>
+                  <TableView fx:id="tableProduit" editable="true" prefHeight="300.0" prefWidth="1100.0" stylesheets="@CSS/stylesheet.css">
+                     <columns>
+                        <TableColumn fx:id="colNArticle" prefWidth="169.0" text="NArticle" />
+                        <TableColumn fx:id="colLabel" prefWidth="169.0" text="Label" />
+                        <TableColumn fx:id="colPrix" prefWidth="169.0" text="Prix" />
+                        <TableColumn fx:id="colNQntA" onEditCommit="#updateReceipt" prefWidth="169.0" text="Qnt Approvisionement" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <VBox alignment="CENTER" fillWidth="false" prefHeight="248.0" prefWidth="609.0" spacing="15.0" style="-fx-background-color: fff;">
+                     <effect>
+                        <DropShadow color="#00000050" height="10.0" radius="4.5" width="10.0" />
+                     </effect>
+                     <children>
+                        <Label text="Produit X">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <JFXComboBox fx:id="comboNumArticle" prefHeight="31.0" prefWidth="183.0" promptText="Num Article" />
+                        <JFXTextField fx:id="textFieldQntA" alignment="CENTER" focusColor="#55a8fd" prefHeight="31.0" prefWidth="188.0" promptText="Qnt Approvisionement " unFocusColor="#38386e" />
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#addProduct" prefHeight="31.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Nouveau produit" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resource/editWhite.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="36.0" prefWidth="191.0" style="-fx-background-color: #38386E;" text="Supprimer Produit" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="26.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resource/delWhite.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets top="-5.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+              </children>
+              <GridPane.margin>
+                  <Insets bottom="20.0" left="30.0" right="30.0" />
+              </GridPane.margin>
+              <effect>
+                  <DropShadow blurType="GAUSSIAN" color="#00000081" height="25.0" radius="12.0" width="25.0" />
+              </effect>
+          </VBox>
     </children>
 </GridPane>
