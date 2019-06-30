@@ -1,8 +1,6 @@
 package Controllers;
 
 import Launcher.Launcher;
-import Models.Client;
-import Models.ReceiptLivraison;
 import Models.ReceiptLivraison;
 import ToolBox.DbConnection;
 import com.jfoenix.controls.JFXTextField;
