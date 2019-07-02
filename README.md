@@ -6,7 +6,17 @@
 A school assignement designed to teach about the SOAP web services.
 
 ## Screenshots:
-<img src="Screenshots/loginGif.gif" width = "250"/> <img src="Screenshots/playGif.gif" width = "250"/>  <img src="Screenshots/leaderboardGif.gif" width="250"/>
+### Articles management scene:
+<img src="src/Resource/Screenshots/article.png" />
+
+### Clients/Suppliers scene:
+<img src="src/Resource/Screenshots/personal.png" />
+
+### Stock management scene:
+<img src="src/Resource/Screenshots/stock.png" />
+
+### Supplying stock scene:
+<img src="src/Resource/Screenshots/suply.png" />
 
 ## Description:
 The app helps a business owner manager his purchases with various clients and suppliers.
