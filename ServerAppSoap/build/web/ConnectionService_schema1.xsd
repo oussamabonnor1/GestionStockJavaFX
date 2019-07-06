@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://service.com/" xmlns:tns="http://service.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="addArticle" type="tns:addArticle"/>
+
+  <xs:element name="addArticleResponse" type="tns:addArticleResponse"/>
+
+  <xs:element name="deleteArticle" type="tns:deleteArticle"/>
+
+  <xs:element name="deleteArticleResponse" type="tns:deleteArticleResponse"/>
+
+  <xs:element name="getArticle" type="tns:getArticle"/>
+
+  <xs:element name="getArticleResponse" type="tns:getArticleResponse"/>
+
+  <xs:element name="getTableArticle" type="tns:getTableArticle"/>
+
+  <xs:element name="getTableArticleResponse" type="tns:getTableArticleResponse"/>
+
+  <xs:element name="hello" type="tns:hello"/>
+
+  <xs:element name="helloResponse" type="tns:helloResponse"/>
+
+  <xs:element name="searchArticle" type="tns:searchArticle"/>
+
+  <xs:element name="searchArticleResponse" type="tns:searchArticleResponse"/>
+
+  <xs:element name="updateArticle" type="tns:updateArticle"/>
+
+  <xs:element name="updateArticleResponse" type="tns:updateArticleResponse"/>
+
+  <xs:complexType name="getArticle">
+    <xs:sequence>
+      <xs:element name="nArticle" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getArticleResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:article" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="article">
+    <xs:sequence>
+      <xs:element name="label" type="xs:string" minOccurs="0"/>
+      <xs:element name="minStock" type="xs:string" minOccurs="0"/>
+      <xs:element name="price" type="xs:string" minOccurs="0"/>
+      <xs:element name="nArticle" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="addArticle">
+    <xs:sequence>
+      <xs:element name="nArticle" type="xs:string" minOccurs="0"/>
+      <xs:element name="label" type="xs:string" minOccurs="0"/>
+      <xs:element name="price" type="xs:string" minOccurs="0"/>
+      <xs:element name="minStrock" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="addArticleResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getTableArticle">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getTableArticleResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:article" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateArticle">
+    <xs:sequence>
+      <xs:element name="nArticle" type="xs:string" minOccurs="0"/>
+      <xs:element name="columName" type="xs:string" minOccurs="0"/>
+      <xs:element name="newValue" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateArticleResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="deleteArticle">
+    <xs:sequence>
+      <xs:element name="nArticle" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="deleteArticleResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="searchArticle">
+    <xs:sequence>
+      <xs:element name="bon" type="xs:string" minOccurs="0"/>
+      <xs:element name="date" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="searchArticleResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:article" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="hello">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="helloResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

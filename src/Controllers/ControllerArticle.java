@@ -1,5 +1,7 @@
 package Controllers;
 
+import ClientSideNew.ConnectionService;
+import ClientSideNew.ConnectionService_Service;
 import Launcher.Launcher;
 import Models.Article;
 import ToolBox.DbConnection;
@@ -26,6 +28,9 @@ import static ToolBox.Utilities.*;
 
 public class ControllerArticle implements Initializable {
 
+    ConnectionService_Service service = new ConnectionService_Service();
+    ConnectionService port;
+
     //region Variables
     @FXML
     private TableView<Article> tableArticle;
@@ -41,8 +46,11 @@ public class ControllerArticle implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         //fetching all articlesApp into observableList
-        articleObservableList = DbConnection.getTableArticle();
+        port = service.getConnectionServicePort();
+        fillUpObservableList();
+
         //Binding the columns with the model's variables
         colnArticle.setCellValueFactory(new PropertyValueFactory<>("nArticle"));
         colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));
@@ -58,12 +66,23 @@ public class ControllerArticle implements Initializable {
         textFieldSearchDate.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.matches("")) tableArticle.setItems(DbConnection.getTableArticle());
-                else if (!textFieldSearchBon.getText().matches(""))
+                if (newValue.matches("")) {
+                    tableArticle.setItems(DbConnection.getTableArticle());
+                } else if (!textFieldSearchBon.getText().matches("")) {
                     tableArticle.setItems(DbConnection.searchArticles(textFieldSearchBon.getText(), newValue));
+                }
             }
         });
 
+    }
+
+    void fillUpObservableList() {
+        List<ClientSideNew.Article> l = port.getTableArticle();
+        articleObservableList.clear();
+        for (int i = 0; i < l.size(); i++) {
+            ClientSideNew.Article a = l.get(i);
+            articleObservableList.add(new Article(a.getNArticle(), a.getLabel(), a.getPrice(), a.getMinStock()));
+        }
     }
 
     //region Methods
@@ -71,7 +90,8 @@ public class ControllerArticle implements Initializable {
     void addArticle(ActionEvent event) {
         //inputChecking makes sure that all the fields are filled...
         if (inputChecking(textFieldNArticle, textFieldPrice, textFieldLabel, textFieldMinStock)) {
-            DbConnection.addArticle(textFieldNArticle.getText(), textFieldLabel.getText(), textFieldPrice.getText(), textFieldMinStock.getText(), tableArticle);
+            port.addArticle(textFieldNArticle.getText(), textFieldLabel.getText(), textFieldPrice.getText(), textFieldMinStock.getText());
+            fillUpObservableList();
             inputDeleting(textFieldNArticle, textFieldPrice, textFieldLabel, textFieldMinStock); //Clearing out the input UI
         } else {
             warningPannel("Erreur!", "Un ou plusieurs champs sont vide!", "Remplissez tout les champs SVP..", Alert.AlertType.ERROR);
@@ -82,7 +102,8 @@ public class ControllerArticle implements Initializable {
     void deleteArticle(ActionEvent event) {
         Article articleToDelete = tableArticle.getSelectionModel().getSelectedItem();
         if (articleToDelete != null) {
-            DbConnection.deleteArticle(articleToDelete.getnArticle() + "", tableArticle);
+            port.deleteArticle(articleToDelete.getnArticle() + "");
+            fillUpObservableList();
         } else {
             warningPannel("Erreur!", "Aucun élément n'est séléctionné!", "Selectionnez un article SVP..", Alert.AlertType.ERROR);
         }
@@ -106,10 +127,11 @@ public class ControllerArticle implements Initializable {
                 columnName = "MinStock";
                 break;
         }
-        DbConnection.updateArticle(tempArticle.getnArticle(), columnName,
+        port.updateArticle(tempArticle.getnArticle(), columnName,
                 isText ? "'" + update.getNewValue() + "'"
                         : update.getNewValue() //adding a literal or numeric value?
-                , tableArticle);
+        );
+        fillUpObservableList();
     }
 
     @FXML

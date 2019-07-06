@@ -75,7 +75,7 @@ public class ControllerLuncher implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        DbConnection.createConnection();
+        //DbConnection.createConnection();
     }
     //endregion
 }

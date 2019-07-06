@@ -14,6 +14,8 @@ import javafx.scene.control.TableView;
 
 import java.io.IOException;
 import java.sql.*;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 
 public class DbConnection {
     private static Connection connection;
