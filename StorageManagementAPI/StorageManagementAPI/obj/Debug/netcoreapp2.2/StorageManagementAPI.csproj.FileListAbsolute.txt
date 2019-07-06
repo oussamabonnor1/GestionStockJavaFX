@@ -1,0 +1,14 @@
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\bin\Debug\netcoreapp2.2\StorageManagementAPI.deps.json
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\bin\Debug\netcoreapp2.2\StorageManagementAPI.runtimeconfig.json
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\bin\Debug\netcoreapp2.2\StorageManagementAPI.runtimeconfig.dev.json
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\bin\Debug\netcoreapp2.2\StorageManagementAPI.dll
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.csprojAssemblyReference.cache
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.csproj.CoreCompileInputs.cache
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.RazorAssemblyInfo.cache
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.RazorAssemblyInfo.cs
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.AssemblyInfoInputs.cache
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.AssemblyInfo.cs
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.RazorTargetAssemblyInfo.cache
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\bin\Debug\netcoreapp2.2\StorageManagementAPI.pdb
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.dll
+C:\Users\oussama\IdeaProjects\GestionStockJavaFX_WebService\StorageManagementAPI\StorageManagementAPI\obj\Debug\netcoreapp2.2\StorageManagementAPI.pdb
